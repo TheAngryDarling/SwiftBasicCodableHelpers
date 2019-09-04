@@ -102,12 +102,22 @@ public extension BasicDecoderChoice {
         #if _runtime(_ObjC)
         switch self {
             case .plist: rtn = PropertyListDecoder()
-            case .json: rtn = BasicCodableHelperPatchedJSONDecoder()
+            case .json:
+                if BasicDecoderChoice.usePatchedJSONDecoder {
+                    rtn = BasicCodableHelperPatchedJSONDecoder()
+                } else {
+                    rtn = JSONDecoder()
+                }
             case .other(let obj): rtn = obj
         }
         #else
         switch self {
-            case .json: rtn = BasicCodableHelperPatchedJSONDecoder()
+            case .json:
+                if BasicDecoderChoice.usePatchedJSONDecoder {
+                    rtn = BasicCodableHelperPatchedJSONDecoder()
+                } else {
+                    rtn = JSONDecoder()
+                }
             case .other(let obj): rtn = obj
         }
         #endif
