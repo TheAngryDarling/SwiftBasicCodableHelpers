@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Programmable Choice for picking an Encoder
 public enum BasicEncoderChoice {
     #if _runtime(_ObjC)
     case xmlPList
@@ -16,7 +17,10 @@ public enum BasicEncoderChoice {
     case other(StandardEncoderType)
 }
 
+/// Programmable Choice for picking a Decoder
 public enum BasicDecoderChoice {
+    
+    /// Flag indicator used to determin which JSON decoder to use (BasicCodableHelperPatchedJSONDecoder or JSONDecoder) when working on Swift < 4.2
     public static var usePatchedJSONDecoder: Bool = true
     #if _runtime(_ObjC)
     case plist
@@ -26,6 +30,7 @@ public enum BasicDecoderChoice {
 }
 
 extension BasicEncoderChoice: BasicCodableHelperCaseIterable {
+    /// Provides all simple encoder choices (excludes other)
     public static var allCases: [BasicEncoderChoice] {
         var rtn: [BasicEncoderChoice] = []
         #if _runtime(_ObjC)
@@ -37,6 +42,7 @@ extension BasicEncoderChoice: BasicCodableHelperCaseIterable {
     }
 }
 extension BasicDecoderChoice: BasicCodableHelperCaseIterable {
+    /// Provides all simple decoder chocies (excludes other)
     public static var allCases: [BasicDecoderChoice] {
         var rtn: [BasicDecoderChoice] = []
         #if _runtime(_ObjC)
@@ -49,7 +55,7 @@ extension BasicDecoderChoice: BasicCodableHelperCaseIterable {
 
 
 public extension BasicEncoderChoice {
-    
+    /// Provides the standard encoder for the selected choice
     var encoder: StandardEncoderType {
         let rtn: StandardEncoderType
         #if _runtime(_ObjC)
@@ -73,6 +79,7 @@ public extension BasicEncoderChoice {
         return rtn
     }
     
+    /// Provides the decoder choice equivilant to this encoder choice if one is available
     var decoderChoice: BasicDecoderChoice? {
         let rtn: BasicDecoderChoice?
         #if _runtime(_ObjC)
@@ -91,12 +98,14 @@ public extension BasicEncoderChoice {
         return rtn
     }
     
+    /// Provides the standard decoder for the selected choice if one is available
     var decoder: StandardDecoderType? {
         return self.decoderChoice?.decoder
     }
 }
 
 public extension BasicDecoderChoice {
+    /// Provides the standard decoder for the selected choice
     var decoder: StandardDecoderType {
         let rtn: StandardDecoderType
         #if _runtime(_ObjC)
