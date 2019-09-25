@@ -7,8 +7,6 @@
 
 Helper methods for Encoding and Decoding Containers
 
-## Usage
-
 ### Extensions
 
 #### KeyedDecodingContainerProtocol / UnkeyedDecodingContainer
@@ -24,7 +22,7 @@ Helper methods for Encoding and Decoding Containers
 * **encodeToSingleOrArray** - New encode to single object or array.  Encodes a collection to either a single object (if only one object is in the collection), OR an array: encodeToSingleOrArray(...) throws
 * **encodeToSingleOrArrayIfPresent** - New encode to single object or array.  Encodes a collection if not nil to either a single object (if only one object is in the collection), OR an array: encodeToSingleOrArrayIfPresent(...) throws
 
-### New Protocols
+### Protocols
 
 * **DecoderType** - Basic definition of any decoder with any data storage.  Provides decode method
 * **DataDecoderType** - Inherits DecoderType where EncodedData type is Data
@@ -35,6 +33,11 @@ Helper methods for Encoding and Decoding Containers
 * **StandardEncoderType** - Its the same structure as DataEncoderType but has no associated types so can be used as a variable type
 
 * **BasicCodableHelperCaseIterable** - A copy of CaseIterable protocol OR a alias to CaseIterable depending on the version of Swift.  Used with Choice Enums
+
+
+### Structures
+
+* **CodableKey** - Basic Coding Key for use when working with unknown keys
 
 ### Choice Enums
 
