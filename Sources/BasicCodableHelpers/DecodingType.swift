@@ -48,7 +48,7 @@ public protocol StandardDecoderType: class {
 extension JSONDecoder: DataDecoderType, StandardDecoderType { }
 extension BasicCodableHelperPatchedJSONDecoder: DataDecoderType, StandardDecoderType { }
 
-// PropertyListDecoder is only available on the Apple Swift SDK, NOT the open Swift SDK
-#if _runtime(_ObjC)
+// PropertyListDecoder is only available on the Apple Swift SDK, or OpenSwift >= 5.1
+#if swift(>=5.1) || _runtime(_ObjC)
 extension PropertyListDecoder: DataDecoderType, StandardDecoderType { }
 #endif

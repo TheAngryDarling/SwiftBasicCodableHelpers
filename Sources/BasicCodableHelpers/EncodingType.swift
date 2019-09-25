@@ -43,8 +43,8 @@ public protocol StandardEncoderType: class {
 
 extension JSONEncoder: DataEncoderType, StandardEncoderType { }
 
-// PropertyListEncoder is only available on the Apple Swift SDK, NOT the open Swift SDK
-#if _runtime(_ObjC)
+// PropertyListEncoder is only available on the Apple Swift SDK, or OpenSwift >= 5.1
+#if swift(>=5.1) || _runtime(_ObjC)
 extension PropertyListEncoder: DataEncoderType, StandardEncoderType { }
 #endif
 
