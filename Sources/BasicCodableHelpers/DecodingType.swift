@@ -46,7 +46,10 @@ public protocol StandardDecoderType: class {
 
 
 extension JSONDecoder: DataDecoderType, StandardDecoderType { }
+#if !_runtime(_ObjC) && !swift(>=4.2)
+/// This is only when BasicCodableHelperPatchedJSONDecoder is not a typealias for JSONDecoder
 extension BasicCodableHelperPatchedJSONDecoder: DataDecoderType, StandardDecoderType { }
+#endif
 
 // PropertyListDecoder is only available on the Apple Swift SDK, or OpenSwift >= 5.1
 #if swift(>=5.1) || _runtime(_ObjC)
