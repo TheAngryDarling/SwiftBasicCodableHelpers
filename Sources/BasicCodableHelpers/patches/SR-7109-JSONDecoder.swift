@@ -24,7 +24,7 @@
 import Foundation
 import CoreFoundation
 
-#if swift(>=4.2)
+#if _runtime(_ObjC) || swift(>=4.2)
 public typealias BasicCodableHelperPatchedJSONDecoder = JSONDecoder
 #else
 
