@@ -191,9 +191,53 @@ class BasicCodableHelpersTests: XCTestCase {
             XCTFail("Encode/Decode Single Or Array, Multiple Item Array Failed:\n \(error)")
         }
     }
+    
+    func testEncodeIfNotEmpty() {
+        struct TestContainer: Codable {
+            private enum CodingKeys: String, CodingKey {
+                case array
+            }
+            let array: [Int]
+            
+            init(_ array: [Int]) { self.array = array }
+            init(from decoder: Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                self.array = try container.decodeIfPresent([Int].self, forKey: .array, withDefaultValue: Array<Int>())
+            }
+            func encode(to encoder: Encoder) throws {
+                var container = encoder.container(keyedBy: CodingKeys.self)
+                try container.encodeIfNotEmpty(self.array, forKey: .array)
+            }
+        }
+        let testFullValue: [Int] = [1,2,3,4]
+        let testEmptyValue: [Int] = []
+        
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(TestContainer(testFullValue))
+            
+            let decoder = BasicCodableHelperPatchedJSONDecoder()
+            let testStruct = try decoder.decode(TestContainer.self, from: data)
+            XCTAssertEqual(testStruct.array, testFullValue)
+        } catch {
+            XCTFail("EncodeIfNotEmpty with values Failed:\n \(error)")
+        }
+        
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(TestContainer(testEmptyValue))
+            
+            let decoder = BasicCodableHelperPatchedJSONDecoder()
+            let testStruct = try decoder.decode(TestContainer.self, from: data)
+            XCTAssertEqual(testStruct.array, testEmptyValue)
+        } catch {
+            XCTFail("EncodeIfNotEmpty with no values Failed:\n \(error)")
+        }
+    }
 
     static var allTests = [
         ("testEncodeDecodeIfNotAndWithDefault", testEncodeDecodeIfNotAndWithDefault),
         ("testEncodeDecodeSingleOrArray", testEncodeDecodeSingleOrArray),
+        ("testEncodeIfNotEmpty", testEncodeIfNotEmpty)
     ]
 }
