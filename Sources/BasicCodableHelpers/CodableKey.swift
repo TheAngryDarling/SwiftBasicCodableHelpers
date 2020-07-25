@@ -4,6 +4,7 @@
 //
 //  Created by Tyler Anger on 2019-09-05.
 //
+// Based off swift code https://github.com/apple/swift/blob/master/stdlib/public/core/Codable.swift.gyb)
 
 import Foundation
 
