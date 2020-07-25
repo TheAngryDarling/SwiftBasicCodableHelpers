@@ -347,6 +347,25 @@ public extension UnkeyedEncodingContainer {
         guard let value = value else { return }
         try self.encode(value, ifNot: nValue())
     }
+    
+    /// Encode a collection of objects if the collection has any objects
+    /// - Parameters:
+    ///   - value: The collection of objects to encode
+    /// - Throws: `EncodingError.invalidValue` if the given value is invalid in
+    mutating func encodeIfNotEmpty<C>(_ value: C) throws where C: Encodable, C: Collection {
+        guard value.count > 0 else { return }
+        try self.encode(value)
+    }
+    
+    /// Encode a collection of objects if the collection has any objects
+    /// - Parameters:
+    ///   - value: The collection of objects to encode
+    /// - Throws: `EncodingError.invalidValue` if the given value is invalid in
+    mutating func encodeIfPresentAndNotEmpty<C>(_ value: C?) throws where C: Encodable, C: Collection {
+        guard let v = value else { return }
+        try encodeIfNotEmpty(v)
+    }
+    
 }
 
 public extension UnkeyedEncodingContainer {
