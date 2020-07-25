@@ -21,6 +21,8 @@ Helper methods for Encoding and Decoding Containers
 * **encodeIfPresent** - New encode if present and not method.  Encodes an object only if its not nil, and not equals a given value: encodeIfPresent(..., andNot: ...) throws
 * **encodeToSingleOrArray** - New encode to single object or array.  Encodes a collection to either a single object (if only one object is in the collection), OR an array: encodeToSingleOrArray(...) throws
 * **encodeToSingleOrArrayIfPresent** - New encode to single object or array.  Encodes a collection if not nil to either a single object (if only one object is in the collection), OR an array: encodeToSingleOrArrayIfPresent(...) throws
+* **encodeIfNotEmpty** - New encode method.  Encodes the collection only if the collection has elements
+* **encodeIfPresentAndNotEmpty** - New encode if present method.  Encodes the collection only if its not nil AND the collection has elements
 
 ### Protocols
 
