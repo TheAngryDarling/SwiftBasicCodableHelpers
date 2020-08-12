@@ -375,7 +375,7 @@ public extension KeyedDecodingContainerProtocol {
     /// - parameter type: The type of dictionary to decode.
     /// - parameter key: The key that the decoded value is associated with.
     /// - Returns: Returns a dictionary of key/value paris that were decoded
-    mutating func decodeDictionary<Key, Value>(_ type: Dictionary<Key, Value>.Type, forKey key: Self.Key) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
+    func decodeDictionary<Key, Value>(_ type: Dictionary<Key, Value>.Type, forKey key: Self.Key) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
         var rtn = Dictionary<Key, Value>()
         
         let container = try nestedContainer(keyedBy: CodableKey.self, forKey: key)
@@ -441,7 +441,7 @@ public extension KeyedDecodingContainerProtocol {
     /// - parameter type: The type of dictionary to decode.
     /// - parameter key: The key that the decoded value is associated with.
     /// - Returns: Returns a dictionary of key/value paris that were decoded or nil if key does not exist
-    mutating func decodeDictionaryIfPresent<Key, Value>(_ type: Dictionary<Key, Value>.Type,
+    func decodeDictionaryIfPresent<Key, Value>(_ type: Dictionary<Key, Value>.Type,
                                                         forKey key: Self.Key) throws -> Dictionary<Key, Value>? where Key: Decodable, Value: Decodable {
         guard self.contains(key) else { return nil }
         return try decodeDictionary(type, forKey: key)
@@ -452,7 +452,7 @@ public extension KeyedDecodingContainerProtocol {
     /// - parameter key: The key that the decoded value is associated with.
     /// - parameter defaultValue: The value to return if key does not exist
     /// - Returns: Returns a dictionary of key/value paris that were decoded
-    mutating func decodeDictionaryIfPresent<Key, Value>(_ type: Dictionary<Key, Value>.Type,
+    func decodeDictionaryIfPresent<Key, Value>(_ type: Dictionary<Key, Value>.Type,
                                                         forKey key: Self.Key,
                                                         withDefaultValue defaultValue: @autoclosure () -> Dictionary<Key, Value>) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
         return (try decodeDictionaryIfPresent(type, forKey: key)) ?? defaultValue()

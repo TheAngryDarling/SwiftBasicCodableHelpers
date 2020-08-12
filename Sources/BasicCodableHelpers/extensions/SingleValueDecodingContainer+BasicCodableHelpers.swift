@@ -9,7 +9,7 @@ import Foundation
 
 public extension SingleValueDecodingContainer {
     /// Provides access to a KeyedDecodingContainer for the given SingleValueDecodingContainer
-    private mutating func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
+    private func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
         let catcher = try self.decode(_DecoderCatcher.self)
         return try catcher.decoder.container(keyedBy: keyType)
     }
@@ -18,7 +18,7 @@ public extension SingleValueDecodingContainer {
     ///
     /// - parameter type: The type of dictionary to decode.
     /// - Returns: Returns a dictionary of key/value paris that were decoded
-    mutating func decodeDictionary<Key, Value>(_ type: Dictionary<Key, Value>.Type) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
+    func decodeDictionary<Key, Value>(_ type: Dictionary<Key, Value>.Type) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
         var rtn = Dictionary<Key, Value>()
         
         let container = try nestedContainer(keyedBy: CodableKey.self)
