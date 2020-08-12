@@ -441,3 +441,42 @@ public extension KeyedEncodingContainerProtocol {
         try self.encodeToSingleOrArray(collection, forKey: key)
     }
 }
+
+public extension KeyedEncodingContainerProtocol {
+    
+    /// Provides an easy method for encoding dictionaries
+    ///
+    /// When the key is encoded it must be transformed to one of te following base types: String, Int, UInt, Bool
+    /// - Parameter dictionary: The dictionary to encode
+    mutating func encodeDictionary<Key, Value>(_ dictionary: [Key: Value], forKey key: Self.Key) throws where Key: Encodable, Value: Encodable {
+    
+        var container = self.nestedContainer(keyedBy: CodableKey.self, forKey: key)
+        for(key, val) in dictionary {
+            let sEncoder = SimpleEncoder()
+            sEncoder.codingPath = self.codingPath
+            try key.encode(to: sEncoder)
+            guard let keyValue = sEncoder.value else {
+                throw DecodingError.valueNotFound(Any.self, DecodingError.Context(codingPath: self.codingPath, debugDescription: "Missing Key encoded value"))
+                
+            }
+            
+            if let k = keyValue as? String {
+                let codingKey = CodableKey(stringValue: k)
+                try container.encode(val, forKey: codingKey)
+            } else {
+                let codingKey = CodableKey(stringValue: "\(keyValue)")
+                try container.encode(val, forKey: codingKey)
+            }
+        }
+    }
+    
+    
+    /// Provides an easy method for encoding dictionaries
+    ///
+    /// When the key is encoded it must be transformed to one of te following base types: String, Int, UInt, Bool
+    /// - Parameter dictionary: The dictionary to encode
+    mutating func encodeDictionaryIfPresent<Key, Value>(_ dictionary: [Key: Value]?, forKey key: Self.Key) throws where Key: Encodable, Value: Encodable {
+        guard let dictionary = dictionary else { return }
+        try self.encodeDictionary(dictionary, forKey: key)
+    }
+}
