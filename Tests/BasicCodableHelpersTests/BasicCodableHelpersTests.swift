@@ -1,6 +1,41 @@
 import XCTest
 @testable import BasicCodableHelpers
 
+public extension JSONEncoder {
+    convenience init(outputFormatting: JSONEncoder.OutputFormatting) {
+        self.init()
+        self.outputFormatting = outputFormatting
+    }
+}
+public func XCTNotThrown(_ block: @autoclosure () throws -> Void,
+                         _ message: @autoclosure () -> String = "",
+                         file: StaticString = #file,
+                         line: UInt = #line) {
+    do {
+        try block()
+    } catch {
+        var msg: String = message()
+        if !msg.isEmpty { msg += "\n" }
+        msg += "\(error)"
+        XCTFail(msg, file: file, line: line)
+    }
+}
+
+public func XCTNotThrown<R>(_ block: @autoclosure () throws -> R,
+                            _ message: @autoclosure () -> String = "",
+                            file: StaticString = #file,
+                            line: UInt = #line) -> R? {
+    do {
+        return try block()
+    } catch {
+        var msg: String = message()
+        if !msg.isEmpty { msg += "\n" }
+        msg += "\(error)"
+        XCTFail(msg, file: file, line: line)
+        return nil
+    }
+}
+
 class BasicCodableHelpersTests: XCTestCase {
     
     struct TestIfNoWithDefaultStruct: Codable, Equatable {
@@ -234,10 +269,167 @@ class BasicCodableHelpersTests: XCTestCase {
             XCTFail("EncodeIfNotEmpty with no values Failed:\n \(error)")
         }
     }
+    struct SingleValueContainer<Key, Value>: Codable, Equatable where Key: Hashable, Key: Codable, Value: Codable, Value: Equatable {
+        let dict: [Key: Value]
+        
+        public init(_ dict: [Key: Value]) {
+            self.dict = dict
+        }
+        public init(from decoder: Decoder) throws {
+            var container = try decoder.singleValueContainer()
+            self.dict = try container.decodeDictionary([Key: Value].self)
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            try container.encodeDictionary(self.dict)
+        }
+        
+        public static func ==(lhs: SingleValueContainer<Key, Value>, rhs: SingleValueContainer<Key, Value>) -> Bool {
+            guard lhs.dict.count == rhs.dict.count else { return false }
+            for (lhsK, lhsV) in lhs.dict {
+                guard let rhsV = rhs.dict[lhsK] else { return false }
+                if lhsV != rhsV { return false}
+            }
+            
+            for (rhsK, rhsV) in rhs.dict {
+                guard let lhsV = lhs.dict[rhsK] else { return false }
+                if lhsV != rhsV { return false}
+            }
+            return true
+        }
+    }
+    
+    struct Container<Key, Value>: Codable, Equatable where Key: Hashable, Key: Codable, Value: Codable, Value: Equatable {
+        private enum CodingKeys: String, CodingKey {
+            case dict
+            case dict2
+        }
+        let dict: SingleValueContainer<Key, Value>
+        let dict2: [Key: Value]
+        
+        public init(_ dict: [Key: Value]) {
+            self.dict = SingleValueContainer(dict)
+            self.dict2 = dict
+        }
+        public init(from decoder: Decoder) throws {
+            var container = try decoder.container(keyedBy: CodingKeys.self)
+            self.dict = try container.decode(SingleValueContainer<Key,Value>.self, forKey: .dict)
+            self.dict2 = try container.decodeDictionary([Key: Value].self, forKey: .dict2)
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(self.dict, forKey: .dict)
+            try container.encodeDictionary(self.dict2, forKey: .dict2)
+        }
+        
+        public static func ==(lhs: Container<Key, Value>, rhs: Container<Key, Value>) -> Bool {
+            guard lhs.dict == rhs.dict else { return false }
+            guard lhs.dict2.count == rhs.dict2.count else { return false }
+            for (lhsK, lhsV) in lhs.dict2 {
+                guard let rhsV = rhs.dict2[lhsK] else { return false }
+                if lhsV != rhsV { return false}
+            }
+            
+            for (rhsK, rhsV) in rhs.dict2 {
+                guard let lhsV = lhs.dict2[rhsK] else { return false }
+                if lhsV != rhsV { return false}
+            }
+            return true
+        }
+    }
+    
+    func testCodingDictionaries() {
+        // Test string key struct
+        if true {
+            let dict: [String: String] = [
+                "key1": "val1",
+                "key2": "val2"
+            ]
+            
+            let container = Container(dict)
+            
+            
+            if let encodedData = XCTNotThrown(try JSONEncoder(outputFormatting: .prettyPrinted).encode(container)) {
+                /*if let jsonString = String(data: encodedData, encoding: .utf8) {
+                    print(jsonString)
+                }*/
+                if let decodedContainer = XCTNotThrown(try JSONDecoder().decode(Container<String, String>.self, from: encodedData)) {
+                     XCTAssertEqual(decodedContainer, container)
+                }
+            }
+        }
+        // Test bool key struct
+        if true {
+            let dict: [Bool: String] = [
+                true: "val1",
+                false: "val2"
+            ]
+            
+            let container = Container(dict)
+            
+            
+            if let encodedData = XCTNotThrown(try JSONEncoder(outputFormatting: .prettyPrinted).encode(container)) {
+                /*if let jsonString = String(data: encodedData, encoding: .utf8) {
+                    print(jsonString)
+                }*/
+                if let decodedContainer = XCTNotThrown(try JSONDecoder().decode(Container<Bool, String>.self, from: encodedData)) {
+                     XCTAssertEqual(decodedContainer, container)
+                }
+            }
+        }
+        
+        // Test Int key struct
+        if true {
+            let dict: [Int: String] = [
+                3: "val1",
+                5: "val2"
+            ]
+            
+            let container = Container(dict)
+            
+            
+            if let encodedData = XCTNotThrown(try JSONEncoder(outputFormatting: .prettyPrinted).encode(container)) {
+                /*if let jsonString = String(data: encodedData, encoding: .utf8) {
+                    print(jsonString)
+                }*/
+                if let decodedContainer = XCTNotThrown(try JSONDecoder().decode(Container<Int, String>.self, from: encodedData)) {
+                     XCTAssertEqual(decodedContainer, container)
+                }
+            }
+        }
+        
+        // Test Enum Key Struct
+        if true {
+            enum DictKey: String, Codable {
+                case type1
+                case type2
+            }
+            let dict: [DictKey: String] = [
+                .type1: "val1",
+                .type2: "val2"
+            ]
+            
+            let container = Container(dict)
+            
+            
+            if let encodedData = XCTNotThrown(try JSONEncoder(outputFormatting: .prettyPrinted).encode(container)) {
+                /*if let jsonString = String(data: encodedData, encoding: .utf8) {
+                    print(jsonString)
+                }*/
+                if let decodedContainer = XCTNotThrown(try JSONDecoder().decode(Container<DictKey, String>.self, from: encodedData)) {
+                     XCTAssertEqual(decodedContainer, container)
+                }
+            }
+        }
+        
+    }
 
     static var allTests = [
         ("testEncodeDecodeIfNotAndWithDefault", testEncodeDecodeIfNotAndWithDefault),
         ("testEncodeDecodeSingleOrArray", testEncodeDecodeSingleOrArray),
-        ("testEncodeIfNotEmpty", testEncodeIfNotEmpty)
+        ("testEncodeIfNotEmpty", testEncodeIfNotEmpty),
+        ("testCodingDictionaries", testCodingDictionaries)
     ]
 }
