@@ -14,6 +14,11 @@ Helper methods for Encoding and Decoding Containers
 * **decodeIfPresent** - New decode if present with default value: decodeIfPresent(..., withDefaultValue: @autoclosure () -> ...) throws -> ...
 * **decodeFromSingleOrArray** - New decode for arrays where the object could be a single value or Array: decodeSingleOrArray\<T\>(...) throws -> [T] where T: Decodable
 * **decodeFromSingleOrArrayIfPresent** - New decode for arrays where the object could be a single value or Array: decodeFromSingleOrArrayIfPresent\<T\>(...) throws -> [T] where T: Decodable
+* **decodeDictionary**, **decodeDictionaryIfPresent** - New decoder for decoding well defined dictionaries as if they were objects 
+
+#### SingleValueDecodingContainer
+
+* **decodeDictionary** - New decoder for decoding well defined dictionaries as if they were objects 
 
 #### KeyedEncodingContainerProtocol / UnkeyedEncodingContainer
 
@@ -23,6 +28,11 @@ Helper methods for Encoding and Decoding Containers
 * **encodeToSingleOrArrayIfPresent** - New encode to single object or array.  Encodes a collection if not nil to either a single object (if only one object is in the collection), OR an array: encodeToSingleOrArrayIfPresent(...) throws
 * **encodeIfNotEmpty** - New encode method.  Encodes the collection only if the collection has elements
 * **encodeIfPresentAndNotEmpty** - New encode if present method.  Encodes the collection only if its not nil AND the collection has elements
+* **encodeDictionary**, **encodeDictionaryIfPresent** - New encode methods for encoding well defined dictionaries as if they were objects
+
+#### SingleValueEncodingContainer
+
+* **encodeDictionary** - New encode methods for encoding well defined dictionaries as if they were objects
 
 ### Protocols
 
@@ -68,4 +78,4 @@ This project is licensed under Apache License v2.0 - see the [LICENSE.md](LICENS
 
 ## Acknowledgments
 
-Modified version of  [JSONDecoder](https://github.com/apple/swift-corelibs-foundation/blob/master/Foundation/JSONEncoder.swift)
+Modified version of  [JSONDecoder](https://github.com/apple/swift-corelibs-foundation/blob/master/Sources/Foundation/JSONEncoder.swift)
