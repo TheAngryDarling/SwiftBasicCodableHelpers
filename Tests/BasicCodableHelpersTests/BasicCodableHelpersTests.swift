@@ -276,7 +276,7 @@ class BasicCodableHelpersTests: XCTestCase {
             self.dict = dict
         }
         public init(from decoder: Decoder) throws {
-            var container = try decoder.singleValueContainer()
+            let container = try decoder.singleValueContainer()
             self.dict = try container.decodeDictionary([Key: Value].self)
         }
         
@@ -313,7 +313,7 @@ class BasicCodableHelpersTests: XCTestCase {
             self.dict2 = dict
         }
         public init(from decoder: Decoder) throws {
-            var container = try decoder.container(keyedBy: CodingKeys.self)
+            let container = try decoder.container(keyedBy: CodingKeys.self)
             self.dict = try container.decode(SingleValueContainer<Key,Value>.self, forKey: .dict)
             self.dict2 = try container.decodeDictionary([Key: Value].self, forKey: .dict2)
         }
