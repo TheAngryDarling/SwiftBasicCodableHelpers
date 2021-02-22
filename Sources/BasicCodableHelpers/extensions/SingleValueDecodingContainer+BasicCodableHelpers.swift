@@ -838,7 +838,7 @@ public extension SingleValueDecodingContainer {
     ///
     /// - parameter type: The type of value to decode.
     /// - Returns: Returns an array of elements that decoded
-    mutating func decodeFromSingleOrArray<T>(_ type: T.Type) throws -> [T] where T: Decodable {
+    func decodeFromSingleOrArray<T>(_ type: T.Type) throws -> [T] where T: Decodable {
         if let singlton: T = try? self.decode(type) { return [singlton] }
         else {
             /*var unkeyed = try self.nestedUnkeyedContainer()
@@ -859,7 +859,7 @@ public extension SingleValueDecodingContainer {
     ///
     /// - parameter type: The type of value to decode.
     /// - Returns: Returns an array of elements that decoded
-    mutating func decodeFromSingleOrArrayIfPresent<T>(_ type: T.Type) throws -> [T]? where T: Decodable {
+    func decodeFromSingleOrArrayIfPresent<T>(_ type: T.Type) throws -> [T]? where T: Decodable {
         guard !self.decodeNil() else { return nil }
         
         return try decodeFromSingleOrArray(type)
@@ -874,8 +874,8 @@ public extension SingleValueDecodingContainer {
     ///
     /// - parameter type: The type of value to decode.
     /// - Returns: Returns an array of elements that decoded
-    mutating func decodeFromSingleOrArrayIfPresent<T>(_ type: T.Type,
-                                                  withDefaultValue defaultValue: @autoclosure () -> [T]) throws -> [T] where T: Decodable {
+    func decodeFromSingleOrArrayIfPresent<T>(_ type: T.Type,
+                                              withDefaultValue defaultValue: @autoclosure () -> [T]) throws -> [T] where T: Decodable {
         return (try decodeFromSingleOrArrayIfPresent(type)) ?? defaultValue()
     }
     
@@ -888,7 +888,7 @@ public extension SingleValueDecodingContainer {
     ///
     /// - parameter type: The type of value to decode.
     /// - Returns: Returns an array of elements that decoded
-    mutating func decodeFromSingleOrArrayIfPresentWithEmptyDefault<T>(_ type: T.Type) throws -> [T] where T: Decodable {
+    func decodeFromSingleOrArrayIfPresentWithEmptyDefault<T>(_ type: T.Type) throws -> [T] where T: Decodable {
         return try decodeFromSingleOrArrayIfPresent(type, withDefaultValue: Array<T>())
     }
 }
@@ -899,7 +899,7 @@ public extension SingleValueDecodingContainer {
     ///
     /// - parameter type: The type of dictionary to decode.
     /// - Returns: Returns a dictionary of key/value paris that were decoded
-    mutating func decodeDictionary<Key, Value>(_ type: Dictionary<Key, Value>.Type) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
+    func decodeDictionary<Key, Value>(_ type: Dictionary<Key, Value>.Type) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
         var rtn = Dictionary<Key, Value>()
         
         let container = try nestedContainer(keyedBy: CodableKey.self)
@@ -964,7 +964,7 @@ public extension SingleValueDecodingContainer {
     ///
     /// - parameter type: The type of dictionary to decode.
     /// - Returns: Returns a dictionary of key/value paris that were decoded or nil if item does not exist
-    mutating func decodeDictionaryIfPresent<Key, Value>(_ type: Dictionary<Key, Value>.Type) throws -> Dictionary<Key, Value>? where Key: Decodable, Value: Decodable {
+    func decodeDictionaryIfPresent<Key, Value>(_ type: Dictionary<Key, Value>.Type) throws -> Dictionary<Key, Value>? where Key: Decodable, Value: Decodable {
         guard !self.decodeNil() else { return nil }
         return try decodeDictionary(type)
     }
@@ -973,7 +973,7 @@ public extension SingleValueDecodingContainer {
     /// - parameter type: The type of dictionary to decode.
     /// - parameter defaultValue: The value to return if the object does not exist
     /// - Returns: Returns a dictionary of key/value paris that were decoded
-    mutating func decodeDictionaryIfPresent<Key, Value>(_ type: Dictionary<Key, Value>.Type,
+    func decodeDictionaryIfPresent<Key, Value>(_ type: Dictionary<Key, Value>.Type,
                                                         withDefaultValue defaultValue: @autoclosure () -> Dictionary<Key, Value>) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
         return (try decodeDictionaryIfPresent(type)) ?? defaultValue()
     }
