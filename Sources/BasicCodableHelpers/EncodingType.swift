@@ -41,10 +41,15 @@ public protocol StandardEncoderType: class {
     func encode<T>(_ value: T) throws -> Data where T : Encodable
 }
 
-extension JSONEncoder: DataEncoderType, StandardEncoderType { }
+// Indicator if the root supports Dictionaries
+public protocol SupportedDictionaryRootEncoderType { }
+// Indicator if the root supports arrays
+public protocol SupportedArrayRootEncoderType { }
+
+extension JSONEncoder: DataEncoderType, StandardEncoderType, SupportedDictionaryRootEncoderType { }
 
 // PropertyListEncoder is only available on the Apple Swift SDK, or OpenSwift >= 5.1
 #if swift(>=5.1) || _runtime(_ObjC)
-extension PropertyListEncoder: DataEncoderType, StandardEncoderType { }
+extension PropertyListEncoder: DataEncoderType, StandardEncoderType, SupportedDictionaryRootEncoderType, SupportedArrayRootEncoderType { }
 #endif
 
