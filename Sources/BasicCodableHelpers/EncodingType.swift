@@ -46,7 +46,7 @@ public protocol SupportedDictionaryRootEncoderType { }
 // Indicator if the root supports arrays
 public protocol SupportedArrayRootEncoderType { }
 
-extension JSONEncoder: DataEncoderType, StandardEncoderType, SupportedDictionaryRootEncoderType { }
+extension JSONEncoder: DataEncoderType, StandardEncoderType, SupportedDictionaryRootEncoderType, SupportedArrayRootEncoderType { }
 
 // PropertyListEncoder is only available on the Apple Swift SDK, or OpenSwift >= 5.1
 #if swift(>=5.1) || _runtime(_ObjC)

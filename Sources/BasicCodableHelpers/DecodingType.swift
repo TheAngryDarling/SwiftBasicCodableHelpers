@@ -50,10 +50,10 @@ public protocol SupportedDictionaryRootDecoderType { }
 public protocol SupportedArrayRootDecoderType { }
 
 
-extension JSONDecoder: DataDecoderType, StandardDecoderType, SupportedDictionaryRootDecoderType { }
+extension JSONDecoder: DataDecoderType, StandardDecoderType, SupportedDictionaryRootDecoderType, SupportedArrayRootDecoderType { }
 #if !_runtime(_ObjC) && !swift(>=4.2)
 /// This is only when BasicCodableHelperPatchedJSONDecoder is not a typealias for JSONDecoder
-extension BasicCodableHelperPatchedJSONDecoder: DataDecoderType, StandardDecoderType, SupportedDictionaryRootDecoderType { }
+extension BasicCodableHelperPatchedJSONDecoder: DataDecoderType, StandardDecoderType, SupportedDictionaryRootDecoderType, SupportedArrayRootDecoderType { }
 #endif
 
 // PropertyListDecoder is only available on the Apple Swift SDK, or OpenSwift >= 5.1
