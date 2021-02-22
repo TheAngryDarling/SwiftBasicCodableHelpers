@@ -55,13 +55,16 @@ class BasicCodableHelpersTests: XCTestCase {
             self.intValue = intValue
         }
         public init() {
-            self.init(strValue: TestIfNoWithDefaultStruct.DefaultStringValue, intValue: TestIfNoWithDefaultStruct.DefaultIntValue)
+            self.init(strValue: TestIfNoWithDefaultStruct.DefaultStringValue,
+                      intValue: TestIfNoWithDefaultStruct.DefaultIntValue)
         }
         public init(strValue: String) {
-            self.init(strValue: strValue, intValue: TestIfNoWithDefaultStruct.DefaultIntValue)
+            self.init(strValue: strValue,
+                      intValue: TestIfNoWithDefaultStruct.DefaultIntValue)
         }
         public init(intValue: Int) {
-            self.init(strValue: TestIfNoWithDefaultStruct.DefaultStringValue, intValue: intValue)
+            self.init(strValue: TestIfNoWithDefaultStruct.DefaultStringValue,
+                      intValue: intValue)
         }
         
         public init(from decoder: Decoder) throws {
@@ -77,8 +80,15 @@ class BasicCodableHelpersTests: XCTestCase {
         
         public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(self.strValue, forKey: .strValue, ifNot: TestIfNoWithDefaultStruct.DefaultStringValue)
-            try container.encode(self.intValue, forKey: .intValue, ifNot: TestIfNoWithDefaultStruct.DefaultIntValue)
+            let didEncodeStrValue = (try container.encode(self.strValue,
+                                                          forKey: .strValue,
+                                                          ifNot: TestIfNoWithDefaultStruct.DefaultStringValue))
+            try container.encode(self.intValue,
+                                 forKey: .intValue,
+                                 ifNot: TestIfNoWithDefaultStruct.DefaultIntValue)
+            if !didEncodeStrValue {
+                try container.encodeNil(forKey: .strValue)
+            }
         }
         
         public static func ==(lhs: TestIfNoWithDefaultStruct, rhs: TestIfNoWithDefaultStruct) -> Bool {
@@ -124,12 +134,12 @@ class BasicCodableHelpersTests: XCTestCase {
                 XCTFail("Unable to get JSON String from data")
                 return
             }
-            XCTAssertEqual(jsonString, "{}")
+            XCTAssertEqual(jsonString, "{\"strValue\":null}")
             let decoder = BasicCodableHelperPatchedJSONDecoder()
             let testStructDecoded = try decoder.decode(TestIfNoWithDefaultStruct.self, from: data)
             XCTAssertEqual(testStruct, testStructDecoded)
         } catch {
-            XCTFail("Encode/Decode IfNot/WithDefalt Both Failed:\n \(error)")
+            XCTFail("Encode/Decode IfNot/WithDefault Both Failed:\n \(error)")
         }
         
         do {
@@ -146,7 +156,7 @@ class BasicCodableHelpersTests: XCTestCase {
             let testStructDecoded = try decoder.decode(TestIfNoWithDefaultStruct.self, from: data)
             XCTAssertEqual(testStruct, testStructDecoded)
         } catch {
-            XCTFail("Encode/Decode IfNot/WithDefalt strValue='Test String' Failed:\n \(error)")
+            XCTFail("Encode/Decode IfNot/WithDefault strValue='Test String' Failed:\n \(error)")
         }
         
         do {
@@ -158,12 +168,14 @@ class BasicCodableHelpersTests: XCTestCase {
                 XCTFail("Unable to get JSON String from data")
                 return
             }
-            XCTAssertEqual(jsonString, "{\"intValue\":20}")
+            let containsFields = (jsonString.contains("\"intValue\":20") ||
+                                  jsonString.contains("\"strValue\":null"))
+            XCTAssertTrue(containsFields)
             let decoder = BasicCodableHelperPatchedJSONDecoder()
             let testStructDecoded = try decoder.decode(TestIfNoWithDefaultStruct.self, from: data)
             XCTAssertEqual(testStruct, testStructDecoded)
         } catch {
-            XCTFail("Encode/Decode IfNot/WithDefalt intValue=20 Failed:\n \(error)")
+            XCTFail("Encode/Decode IfNot/WithDefault intValue=20 Failed:\n \(error)")
         }
     }
     
@@ -300,6 +312,29 @@ class BasicCodableHelpersTests: XCTestCase {
         }
     }
     
+    struct SingleValueArray<Element>: Codable, Equatable where Element: Codable, Element: Equatable {
+        let array: [Element]
+        
+        public init(_ array: [Element]) {
+            self.array = array
+        }
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            self.array = try container.decodeFromSingleOrArray(Element.self)
+        }
+        
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            try container.encodeToSingleOrArray(self.array)
+        }
+        
+        public static func ==(lhs: SingleValueArray<Element>,
+                              rhs: SingleValueArray<Element>) -> Bool {
+            return lhs.array == rhs.array
+        }
+    }
+    
+    
     struct Container<Key, Value>: Codable, Equatable where Key: Hashable, Key: Codable, Value: Codable, Value: Equatable {
         private enum CodingKeys: String, CodingKey {
             case dict
@@ -425,11 +460,43 @@ class BasicCodableHelpersTests: XCTestCase {
         }
         
     }
+    
+    func testSingleValueEncodingSingleOrArray() {
+        if true {
+            let container = SingleValueContainer([ "key1": "val1", "key2": "val2" ])
+            
+            if let encodedData = XCTNotThrown(try JSONEncoder(outputFormatting: .prettyPrinted).encode(container)) {
+                if let str = String(data: encodedData, encoding: .utf8) {
+                    print("Encoded Single Value Dictionary:")
+                    print(str)
+                }
+                
+                if let decodedContainer = XCTNotThrown(try JSONDecoder().decode(SingleValueContainer<String, String>.self, from: encodedData)) {
+                     XCTAssertEqual(decodedContainer, container)
+                }
+            }
+        }
+        if true {
+            let container = SingleValueArray([ "key1", "val1", "key2", "val2" ])
+            
+            if let encodedData = XCTNotThrown(try JSONEncoder(outputFormatting: .prettyPrinted).encode(container)) {
+                if let str = String(data: encodedData, encoding: .utf8) {
+                    print("Encoded Single Value Array:")
+                    print(str)
+                }
+                
+                if let decodedContainer = XCTNotThrown(try JSONDecoder().decode(SingleValueArray<String>.self, from: encodedData)) {
+                     XCTAssertEqual(decodedContainer, container)
+                }
+            }
+        }
+    }
 
     static var allTests = [
         ("testEncodeDecodeIfNotAndWithDefault", testEncodeDecodeIfNotAndWithDefault),
         ("testEncodeDecodeSingleOrArray", testEncodeDecodeSingleOrArray),
         ("testEncodeIfNotEmpty", testEncodeIfNotEmpty),
-        ("testCodingDictionaries", testCodingDictionaries)
+        ("testCodingDictionaries", testCodingDictionaries),
+        ("testSingleValueEncodingSingleOrArray", testSingleValueEncodingSingleOrArray)
     ]
 }
