@@ -1,0 +1,270 @@
+//
+//  KeyedEncodingContainerProtocol+BasicCodableHelpers.dwift
+//  BasicCodableHelpers
+//
+//  Created by Tyler Anger on 2021-02-20.
+//
+
+import Foundation
+#if swift(>=4.2)
+    #if canImport(CustomInts)
+import CustomInts
+    #endif
+#endif
+
+<%!
+
+func buildFunctions(for group: String, withTypes groupTypes: [String]) -> String {
+    var rtn: String = "//\(group)\n"
+    rtn += "public extension KeyedEncodingContainerProtocol {\n"
+    for groupType in groupTypes {
+        var templatePrefix: String = ""
+        var templateSuffix: String = ""
+        if groupType == "T" {
+            templatePrefix = "<T>"
+            templateSuffix = " where T: Encodable, T: Equatable"
+        }
+        
+        var fnc = """
+            /// Encodes the given value for the given key.
+            ///
+            /// - parameter value: The value to encode.
+            /// - parameter key: The key to associate the value with.
+            /// - parameter condition: The condition to test if the value should be encoded
+            /// - throws: `EncodingError.invalidValue` if the given value is invalid in the current context for this format.
+            /// - returns: Returns an indicator if the object was encoded or not
+            @discardableResult
+            mutating func encode\(templatePrefix)(_ value: \(groupType),
+                                 forKey key: Self.Key,
+                                 where condition: (\(groupType)) -> Bool) throws -> Bool\(templateSuffix) {
+                guard condition(value) else { return false }
+                try self.encode(value, forKey: key)
+                return true
+            }
+            /// Encodes the given value for the given key.
+            ///
+            /// - parameter value: The value to encode.
+            /// - parameter key: The key to associate the value with.
+            /// - parameter condition: The condition to test if the value should be encoded
+            /// - throws: `EncodingError.invalidValue` if the given value is invalid in the current context for this format.
+            /// - returns: Returns an indicator if the object was encoded or not
+            @discardableResult
+            mutating func encodeIfPresent\(templatePrefix)(_ value: \(groupType)?,
+                                 forKey key: Self.Key,
+                                 where condition: (\(groupType)) -> Bool) throws -> Bool\(templateSuffix) {
+                guard let val = value else { return false }
+                return (try self.encode(val, forKey: key, where: condition))
+            }
+
+            /// Encodes the given value for the given key.
+            ///
+            /// - parameter value: The value to encode.
+            /// - parameter key: The key to associate the value with.
+            /// - parameter nValue: The value it should be for encoding to occur
+            /// - throws: `EncodingError.invalidValue` if the given value is invalid in the current context for this format.
+            /// - returns: Returns an indicator if the object was encoded or not
+            @discardableResult
+            mutating func encode\(templatePrefix)(_ value: \(groupType),
+                                 forKey key: Self.Key,
+                                 if nValue: @autoclosure () -> \(groupType)) throws -> Bool\(templateSuffix) {
+                return (try self.encode(value, forKey: key, where: { $0 == nValue() }))
+            }
+
+            /// Encodes the given value for the given key.
+            ///
+            /// - parameter value: The value to encode.
+            /// - parameter key: The key to associate the value with.
+            /// - parameter nValue: The value it should be for encoding to occur
+            /// - throws: `EncodingError.invalidValue` if the given value is invalid in the current context for this format.
+            /// - returns: Returns an indicator if the object was encoded or not
+            @discardableResult
+            mutating func encodeIfPresent\(templatePrefix)(_ value: \(groupType)?,
+                                 forKey key: Self.Key,
+                                 if nValue: @autoclosure () -> \(groupType)) throws -> Bool\(templateSuffix) {
+                return (try self.encodeIfPresent(value,
+                                                 forKey: key,
+                                                 where: { $0 == nValue() }))
+            }
+
+            /// Encodes the given value for the given key.
+            ///
+            /// - parameter value: The value to encode.
+            /// - parameter key: The key to associate the value with.
+            /// - parameter nValue: The value it should not be for encoding to occur
+            /// - throws: `EncodingError.invalidValue` if the given value is invalid in the current context for this format.
+            /// - returns: Returns an indicator if the object was encoded or not
+            @discardableResult
+            mutating func encode\(templatePrefix)(_ value: \(groupType),
+                                 forKey key: Self.Key,
+                                 ifNot nValue: @autoclosure () -> \(groupType)) throws -> Bool\(templateSuffix) {
+                return (try self.encode(value,
+                                        forKey: key,
+                                        where: { $0 != nValue() }))
+            }
+
+            /// Encodes the given value for the given key.
+            ///
+            /// - parameter value: The value to encode.
+            /// - parameter key: The key to associate the value with.
+            /// - parameter nValue: The value it should not be for encoding to occur
+            /// - throws: `EncodingError.invalidValue` if the given value is invalid in the current context for this format.
+            /// - returns: Returns an indicator if the object was encoded or not
+            @discardableResult
+            mutating func encodeIfPresent\(templatePrefix)(_ value: \(groupType)?,
+                                 forKey key: Self.Key,
+                                 ifNot nValue: @autoclosure () -> \(groupType)) throws -> Bool\(templateSuffix) {
+                return (try self.encodeIfPresent(value,
+                                                 forKey: key,
+                                                 where: { $0 != nValue() }))
+            }
+        """
+        rtn += fnc
+    }
+    rtn += "\n}\n"
+    return rtn
+}
+    
+%>
+
+<%
+let knownTypeGroups: [String: [String]] = [
+    "Ints": ["Int8", "Int16", "Int32", "Int64", "Int"],
+    "UInts": ["UInt8", "UInt16", "UInt32", "UInt64", "UInt"],
+    "Other": ["Bool", "Double", "Float", "String", "T"],
+]
+%>
+
+<% for key in ["Ints","UInts","Other"] /* Did it this way to ensure the order I wanted */ { %>
+<%=buildFunctions(for: key, withTypes: knownTypeGroups[key]!)%>
+<% } %>
+
+#if swift(>=4.2)
+    #if canImport(CustomInts)
+<%=buildFunctions(for: "Custom Ints", withTypes: ["Int24", "Int40", "Int48", "Int56"])%>
+<%=buildFunctions(for: "Custom UInts", withTypes: ["UInt24", "UInt40", "UInt48", "UInt56"])%>
+    #endif
+#endif
+
+public extension KeyedEncodingContainerProtocol {
+    /// Encode a collection of objects if the collection has any objects
+    /// - Parameters:
+    ///   - value: The collection of objects to encode
+    ///   - key: The key to associate the value with.
+    /// - Throws: `EncodingError.invalidValue` if the given value is invalid in
+    /// - returns: Returns an indicator if the object was encoded or not 
+    @discardableResult
+    mutating func encodeIfNotEmpty<C>(_ value: C,
+                                      forKey key: Self.Key) throws -> Bool where C: Encodable, C: Collection {
+        guard value.count > 0 else { return false }
+        try self.encode(value, forKey: key)
+        return true
+    }
+    
+    /// Encode a collection of objects if the collection has any objects
+    /// - Parameters:
+    ///   - value: The collection of objects to encode
+    ///   - key: The key to associate the value with.
+    /// - Throws: `EncodingError.invalidValue` if the given value is invalid in
+    /// - returns: Returns an indicator if the object was encoded or not
+    @discardableResult
+    mutating func encodeIfPresentAndNotEmpty<C>(_ value: C?,
+                                                forKey key: Self.Key) throws -> Bool where C: Encodable, C: Collection {
+        guard let v = value else { return false }
+        return (try encodeIfNotEmpty(v, forKey: key))
+    }
+}
+
+
+public extension KeyedEncodingContainerProtocol {
+    /// Provides an easy method to encode an array of encodable objects in a dynamic way
+    ///
+    /// The following rules apply when encoding:
+    /// 1. If collection count is 0, An empty array gets encoded
+    /// 2. If collection count is 1, encodes the object as a single value and not an array
+    /// 3. Encodes as a regular array
+    ///
+    /// - Parameters:
+    ///   - collection: The collection to encode
+    ///   - key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or not
+    @discardableResult
+    mutating func encodeToSingleOrArray<C>(_ collection: C,
+                                           forKey key: Self.Key) throws -> SingleOrArrayEncodedAs where C: Collection, C.Element: Encodable {
+        
+        if collection.count == 1 {
+            try self.encode(collection[collection.startIndex], forKey: key)
+            return .single
+        } else {
+           
+            var container = self.nestedUnkeyedContainer(forKey: key)
+            for o in collection {
+                try container.encode(o)
+            }
+            return .array
+        }
+    }
+    
+    /// Provides an easy method to encode an array of encodable objects in a dynamic way
+    ///
+    /// The following rules apply when encoding:
+    /// 1. If collection is nil, nothing gets encoded
+    /// 2. If collection count is 0, An empty array gets encoded
+    /// 3. If collection count is 1, encodes the object as a single value and not an array
+    /// 4. Encodes as a regular array
+    ///
+    /// - Parameters:
+    ///   - collection: The collection to encode
+    ///   - key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or not
+    @discardableResult
+    mutating func encodeToSingleOrArrayIfPresent<C>(_ collection: C?,
+                                                    forKey key: Self.Key) throws -> SingleOrArrayEncodedAsIfPresent where C: Collection, C.Element: Encodable {
+        guard let collection = collection else { return .none }
+        return SingleOrArrayEncodedAsIfPresent(try self.encodeToSingleOrArray(collection, forKey: key))
+        
+    }
+}
+
+public extension KeyedEncodingContainerProtocol {
+    
+    /// Provides an easy method for encoding dictionaries
+    ///
+    /// When the key is encoded it must be transformed to one of te following base types: String, Int, UInt, Bool
+    /// - Parameter dictionary: The dictionary to encode
+    mutating func encodeDictionary<Key, Value>(_ dictionary: [Key: Value],
+                                               forKey key: Self.Key) throws where Key: Encodable, Value: Encodable {
+    
+        var container = self.nestedContainer(keyedBy: CodableKey.self, forKey: key)
+        for(key, val) in dictionary {
+            let sEncoder = SimpleEncoder()
+            sEncoder.codingPath = self.codingPath
+            try key.encode(to: sEncoder)
+            guard let keyValue = sEncoder.value else {
+                throw DecodingError.valueNotFound(Any.self, DecodingError.Context(codingPath: self.codingPath, debugDescription: "Missing Key encoded value"))
+                
+            }
+            
+            if let k = keyValue as? String {
+                let codingKey = CodableKey(stringValue: k)
+                try container.encode(val, forKey: codingKey)
+            } else {
+                let codingKey = CodableKey(stringValue: "\(keyValue)")
+                try container.encode(val, forKey: codingKey)
+            }
+        }
+    }
+    
+    
+    /// Provides an easy method for encoding dictionaries
+    ///
+    /// When the key is encoded it must be transformed to one of te following base types: String, Int, UInt, Bool
+    /// - Parameter dictionary: The dictionary to encode
+    /// - returns: Returns an indicator if the object was encoded or not
+    @discardableResult
+    mutating func encodeDictionaryIfPresent<Key, Value>(_ dictionary: [Key: Value]?,
+                                                        forKey key: Self.Key) throws -> Bool where Key: Encodable, Value: Encodable {
+        guard let dictionary = dictionary else { return false }
+        try self.encodeDictionary(dictionary, forKey: key)
+        return true
+    }
+}
