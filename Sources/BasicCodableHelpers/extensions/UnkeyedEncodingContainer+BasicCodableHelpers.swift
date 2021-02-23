@@ -1828,13 +1828,39 @@ public extension UnkeyedEncodingContainer {
     /// Encode a collection of objects if the collection has any objects
     /// - Parameters:
     ///   - value: The collection of objects to encode
+    ///   - condition: test condition to indicate if encoding should occur
+    /// - Throws: `EncodingError.invalidValue` if the given value is invalid in
+    /// - returns: Returns an indicator if the object was encoded or not
+    @discardableResult
+    mutating func encode<C>(_ value: C,
+                            where condition: (C) -> Bool) throws -> Bool where C: Encodable, C: Collection {
+        guard condition(value) else { return false }
+        try self.encode(value)
+        return true
+    }
+    
+    /// Encode a collection of objects if the collection has any objects
+    /// - Parameters:
+    ///   - value: The collection of objects to encode
+    ///   - condition: test condition to indicate if encoding should occur
+    /// - Throws: `EncodingError.invalidValue` if the given value is invalid in
+    /// - returns: Returns an indicator if the object was encoded or not
+    @discardableResult
+    mutating func encodeIfPresent<C>(_ value: C?,
+                                where condition: (C) -> Bool) throws -> Bool where C: Encodable, C: Collection {
+        guard let val = value else { return false }
+        return try self.encode(val, where: condition)
+    }
+    
+    /// Encode a collection of objects if the collection has any objects
+    /// - Parameters:
+    ///   - value: The collection of objects to encode
     /// - Throws: `EncodingError.invalidValue` if the given value is invalid in
     /// - returns: Returns an indicator if the object was encoded or not
     @discardableResult
     mutating func encodeIfNotEmpty<C>(_ value: C) throws -> Bool where C: Encodable, C: Collection {
-        guard value.count > 0 else { return false }
-        try self.encode(value)
-        return true
+        return try self.encode(value,
+                               where: { return !$0.isEmpty })
     }
     
     /// Encode a collection of objects if the collection has any objects
@@ -1845,7 +1871,7 @@ public extension UnkeyedEncodingContainer {
     @discardableResult
     mutating func encodeIfPresentAndNotEmpty<C>(_ value: C?) throws -> Bool where C: Encodable, C: Collection {
         guard let v = value else { return false }
-        return (try encodeIfNotEmpty(v))
+        return try encodeIfNotEmpty(v)
     }
 }
 
