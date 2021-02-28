@@ -44,9 +44,9 @@ public protocol StandardDecoderType: class {
     func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable
 }
 
-// Indicator if the root supports Dictionaries
+/// Indicator if the root supports Dictionaries
 public protocol SupportedDictionaryRootDecoderType { }
-// Indicator if the root supports arrays
+/// Indicator if the root supports arrays
 public protocol SupportedArrayRootDecoderType { }
 
 
@@ -60,3 +60,45 @@ extension BasicCodableHelperPatchedJSONDecoder: DataDecoderType, StandardDecoder
 #if swift(>=5.1) || _runtime(_ObjC)
 extension PropertyListDecoder: DataDecoderType, StandardDecoderType, SupportedDictionaryRootDecoderType, SupportedArrayRootDecoderType { }
 #endif
+
+public extension DecoderType where Self: SupportedDictionaryRootDecoderType, Self: SupportedArrayRootDecoderType {
+    /// Provides an easy method of decoding a single value/array object into an array
+    ///
+    /// The following rules apply when decoding:
+    /// 1. Tries to decode as a single value object and reutrns as a 1 element array
+    /// 2. Tries to decode as an array of objects and returns it
+    ///
+    /// - parameters:
+    ///   - type: The type of value to decode.
+    ///   - data: The object to decode.
+    /// - Returns: Returns an array of elements that decoded
+    func decodeFromSingleOrArray<T>(_ type: T.Type,
+                                    from data: EncodedData) throws -> [T] where T: Decodable {
+        if let singlton: T = try? self.decode(type, from: data) {
+            return [singlton]
+        } else {
+            return try self.decode([T].self, from: data)
+        }
+    }
+}
+
+public extension StandardDecoderType where Self: SupportedDictionaryRootEncoderType, Self: SupportedArrayRootDecoderType {
+    /// Provides an easy method of decoding a single value/array object into an array
+    ///
+    /// The following rules apply when decoding:
+    /// 1. Tries to decode as a single value object and reutrns as a 1 element array
+    /// 2. Tries to decode as an array of objects and returns it
+    ///
+    /// - parameters:
+    ///   - type: The type of value to decode.
+    ///   - data: The object to decode.
+    /// - Returns: Returns an array of elements that decoded
+    func stdDecodeFromSingleOrArray<T>(_ type: T.Type,
+                                       from data: Data) throws -> [T] where T: Decodable {
+        if let singlton: T = try? self.decode(type, from: data) {
+            return [singlton]
+        } else {
+            return try self.decode([T].self, from: data)
+        }
+    }
+}
