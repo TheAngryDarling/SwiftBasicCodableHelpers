@@ -34,15 +34,27 @@ Helper methods for Encoding and Decoding Containers
 
 * **encodeDictionary** - New encode methods for encoding well defined dictionaries as if they were objects
 
+#### Encoder
+
+* **encodeToSingleOrArray** - New encode to single object or array.  Encodes a collection to either a single object (if only one object is in the collection), OR an array: encodeToSingleOrArray(...) throws
+
+#### Decoder
+
+* **decodeFromSingleOrArray** - New decode for arrays where the object could be a single value or Array: decodeSingleOrArray\<T\>(...) throws -> [T] where T: Decodable
+
 ### Protocols
 
 * **DecoderType** - Basic definition of any decoder with any data storage.  Provides decode method
 * **DataDecoderType** - Inherits DecoderType where EncodedData type is Data
 * **StandardDecoderType** - Its the same structure as DataDecoderType but has no associated types so can be used as a variable type
+* **SupportedDictionaryRootDecoderType** -  Indicator protocol if a DecoderType supports decoding dictionaries from the root
+* **SupportedArrayRootDecoderType** - Indicator protocol if a DecoderType supports decoding arrays from the root
 
 * **EncoderType** - Basic definition of any encoder with any data storage.  Provides encode method
 * **DataEncoderType** - Inherits EncoderType where EncodedData type is Data
 * **StandardEncoderType** - Its the same structure as DataEncoderType but has no associated types so can be used as a variable type
+* **SupportedDictionaryRootEncoderType** - Indicator protocol if an EncoderType supports encoding dictionaries from the root
+* **SupportedArrayRootEncoderType** - Indicator protocol if an EncoderType supports encoding arrays from the root
 
 * **BasicCodableHelperCaseIterable** - A copy of CaseIterable protocol OR a alias to CaseIterable depending on the version of Swift.  Used with Choice Enums
 
