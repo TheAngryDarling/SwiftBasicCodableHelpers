@@ -7,10 +7,23 @@
 
 import Foundation
 
+internal class EncoderHelper: Encodable {
+    private let block: (Encoder) throws -> Void
+    
+    /// Create new Structure to access an Encoder
+    /// - Parameters:
+    ///   - block: The block to execute providing the the container
+    public init(block: @escaping (Encoder) throws -> Void) {
+        self.block = block
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        try self.block(encoder)
+    }
+}
+
 /// Structure used to gain access to child KeyedEncodingContainer
-internal struct KeyedEncoderHelper<NestedKey>: Encodable where NestedKey: CodingKey {
-    let keyType: NestedKey.Type
-    let block: (inout KeyedEncodingContainer<NestedKey>) throws -> Void
+internal class KeyedEncoderHelper<NestedKey>: EncoderHelper where NestedKey: CodingKey {
     
     /// Create new Structure to access a KeyedEncodingContainer
     /// - Parameters:
@@ -18,24 +31,22 @@ internal struct KeyedEncoderHelper<NestedKey>: Encodable where NestedKey: Coding
     ///   - block: The block to execute providing the the container
     public init(keyType: NestedKey.Type,
                 block: @escaping (inout KeyedEncodingContainer<NestedKey>) throws -> Void) {
-        self.keyType = keyType
-        self.block = block
-    }
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: self.keyType)
-        try self.block(&container)
+        super.init() { encoder in
+            var container = encoder.container(keyedBy: NestedKey.self)
+            try block(&container)
+        }
     }
 }
 /// Structure used to gain access to child UnkeyedEncodingContainer
-internal struct UnkeyedEncoderHelper: Encodable {
-    let block: (inout UnkeyedEncodingContainer) throws -> Void
+internal class UnkeyedEncoderHelper: EncoderHelper {
+
     /// Create new Structure to access a UnkeyedEncodingContainer
     /// - Parameter block: The block to execute providing the the container
     public init(block: @escaping (inout UnkeyedEncodingContainer) throws -> Void) {
-        self.block = block
-    }
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.unkeyedContainer()
-        try self.block(&container)
+        //self.block = block
+        super.init() { encoder in
+            var container = encoder.unkeyedContainer()
+            try block(&container)
+        }
     }
 }
