@@ -477,16 +477,19 @@ class BasicCodableHelpersTests: XCTestCase {
             }
         }
         if true {
-            let container = SingleValueArray([ "key1", "val1", "key2", "val2" ])
-            
-            if let encodedData = XCTNotThrown(try JSONEncoder(outputFormatting: .prettyPrinted).encode(container)) {
-                if let str = String(data: encodedData, encoding: .utf8) {
-                    print("Encoded Single Value Array:")
-                    print(str)
-                }
+            let arrays: [[String]] = [["key1"], [ "key1", "val1", "key2", "val2" ]]
+            for (index, array) in arrays.enumerated() {
+                let container = SingleValueArray(array)
                 
-                if let decodedContainer = XCTNotThrown(try JSONDecoder().decode(SingleValueArray<String>.self, from: encodedData)) {
-                     XCTAssertEqual(decodedContainer, container)
+                if let encodedData = XCTNotThrown(try JSONEncoder(outputFormatting: .prettyPrinted).encode(container)) {
+                    if let str = String(data: encodedData, encoding: .utf8) {
+                        print("[\(index)]: Encoded Single Value Array:")
+                        print(str)
+                    }
+                    
+                    if let decodedContainer = XCTNotThrown(try JSONDecoder().decode(SingleValueArray<String>.self, from: encodedData)) {
+                         XCTAssertEqual(decodedContainer, container)
+                    }
                 }
             }
         }
