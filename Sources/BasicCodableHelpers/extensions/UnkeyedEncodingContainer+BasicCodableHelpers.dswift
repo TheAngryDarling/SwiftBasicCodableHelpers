@@ -218,15 +218,11 @@ public extension UnkeyedEncodingContainer {
     @discardableResult
     mutating func encodeToSingleOrArray<C>(_ collection: C) throws -> SingleOrArrayEncodedAs where C: Collection, C.Element: Encodable {
         
-        if collection.count == 1 {
+        if canEncodeSingleFromArray(collection,
+                                    at: self.codingPath.appending(index: self.count)) {
             try self.encode(collection[collection.startIndex])
             return .single
         } else {
-            
-            /*var container = self.nestedUnkeyedContainer()
-            for o in collection {
-                try container.encode(o)
-            }*/
             try self.nestedUnkeyedContainer() { container in
                 for o in collection {
                     try container.encode(o)

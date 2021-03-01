@@ -211,14 +211,11 @@ public extension SingleValueEncodingContainer {
     @discardableResult
     mutating func encodeToSingleOrArray<C>(_ collection: C) throws -> SingleOrArrayEncodedAs where C: Collection, C.Element: Encodable {
         
-        if collection.count == 1 {
+        if canEncodeSingleFromArray(collection,
+                                    at: self.codingPath) {
             try self.encode(collection[collection.startIndex])
             return .single
         } else {
-            /*var container = self.nestedUnkeyedContainer()
-            for o in collection {
-                try container.encode(o)
-            }*/
             try self.nestedUnkeyedContainer { container in
                 for o in collection {
                     try container.encode(o)
@@ -252,24 +249,6 @@ public extension SingleValueEncodingContainer {
     /// When the key is encoded it must be transformed to one of te following base types: String, Int, UInt, Bool
     /// - Parameter dictionary: The dictionary to encode
     mutating func encodeDictionary<Key, Value>(_ dictionary: [Key: Value]) throws where Key: Encodable, Value: Encodable {
-        /*var container = self.nestedContainer(keyedBy: CodableKey.self)
-        for(key, val) in dictionary {
-            let sEncoder = SimpleEncoder()
-            sEncoder.codingPath = self.codingPath
-            try key.encode(to: sEncoder)
-            guard let keyValue = sEncoder.value else {
-                throw DecodingError.valueNotFound(Any.self, DecodingError.Context(codingPath: self.codingPath, debugDescription: "Missing Key encoded value"))
-                
-            }
-
-            if let k = keyValue as? String {
-                let codingKey = CodableKey(stringValue: k)
-                try container.encode(val, forKey: codingKey)
-            } else {
-                let codingKey = CodableKey(stringValue: "\(keyValue)")
-                try container.encode(val, forKey: codingKey)
-            }
-        }*/
         let codPath = self.codingPath
         try self.nestedContainer(keyedBy: CodableKey.self) { container in
             for(key, val) in dictionary {

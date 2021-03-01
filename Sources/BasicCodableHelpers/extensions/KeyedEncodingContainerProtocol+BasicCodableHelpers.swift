@@ -2201,11 +2201,10 @@ public extension KeyedEncodingContainerProtocol {
     mutating func encodeToSingleOrArray<C>(_ collection: C,
                                            forKey key: Self.Key) throws -> SingleOrArrayEncodedAs where C: Collection, C.Element: Encodable {
         
-        if collection.count == 1 {
+        if canEncodeSingleFromArray(collection, at: self.codingPath.appending(key)) {
             try self.encode(collection[collection.startIndex], forKey: key)
             return .single
         } else {
-           
             var container = self.nestedUnkeyedContainer(forKey: key)
             for o in collection {
                 try container.encode(o)

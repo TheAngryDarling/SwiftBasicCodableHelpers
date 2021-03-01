@@ -20,8 +20,7 @@ public extension Encoder {
     /// - returns: Returns an indicator if the object was encoded or not
     @discardableResult
     func encodeToSingleOrArray<C>(_ collection: C) throws -> SingleOrArrayEncodedAs where C: Collection, C.Element: Encodable {
-        
-        if collection.count == 1 {
+        if canEncodeSingleFromArray(collection) {
             var container = self.singleValueContainer()
             try container.encode(collection[collection.startIndex])
             return .single
