@@ -7,7 +7,8 @@
 
 import Foundation
 
-internal final class _DecoderCatcher: Decodable {
+/// Class used to gain access  to child Decoder
+public final class DecoderCatcher: Decodable {
     public let decoder: Decoder
     
     public init(from decoder: Decoder) {
@@ -15,23 +16,47 @@ internal final class _DecoderCatcher: Decodable {
     }
 }
 
-internal final class _EncoderCatcher: Encodable {
-    public var encoder: Encoder!
-    public init() { }
+/// Class used to gain access to a child encoder
+public class EncoderCatcher: Encodable {
+    private let block: (Encoder) throws -> Void
     
-    func encode(to encoder: Encoder) {
-        self.encoder = encoder
+    /// Create new Structure to access an Encoder
+    /// - Parameters:
+    ///   - block: The block to execute providing the the container
+    public init(block: @escaping (Encoder) throws -> Void) {
+        self.block = block
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        try self.block(encoder)
     }
 }
 
-internal final class _KeyedEncodingContainerCatcher<NestedKey>: Encodable where NestedKey : CodingKey {
-    let event: (inout KeyedEncodingContainer<NestedKey>) throws -> Void
-    public init(event: @escaping (inout KeyedEncodingContainer<NestedKey>) throws -> Void) {
-        self.event = event
-    }
+/// Class used to gain access to a child KeyedEncodingContainer
+public class KeyedEncodingContainerCatcher<NestedKey>: EncoderCatcher where NestedKey: CodingKey {
     
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: NestedKey.self)
-        try event(&container)
+    /// Create new Structure to access a KeyedEncodingContainer
+    /// - Parameters:
+    ///   - keyType: The coding key type to use on the KeyedEncodingContainer
+    ///   - block: The block to execute providing the the container
+    public init(keyType: NestedKey.Type,
+                block: @escaping (inout KeyedEncodingContainer<NestedKey>) throws -> Void) {
+        super.init() { encoder in
+            var container = encoder.container(keyedBy: NestedKey.self)
+            try block(&container)
+        }
+    }
+}
+/// Class used to gain access to a child UnkeyedEncodingContainer
+public class UnkeyedEncodingContainerCatcher: EncoderCatcher {
+
+    /// Create new Structure to access a UnkeyedEncodingContainer
+    /// - Parameter block: The block to execute providing the the container
+    public init(block: @escaping (inout UnkeyedEncodingContainer) throws -> Void) {
+        //self.block = block
+        super.init() { encoder in
+            var container = encoder.unkeyedContainer()
+            try block(&container)
+        }
     }
 }
