@@ -134,13 +134,14 @@ public extension SingleValueEncodingContainer {
     /// Provides access to a KeyedDecodingContainer for the given SingleValueDecodingContainer
     mutating fileprivate func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type,
                                                 block: @escaping (inout KeyedEncodingContainer<NestedKey>) throws -> Void) throws {
-        try self.encode(KeyedEncoderHelper(keyType: keyType, block: block))
+        try self.encode(KeyedEncodingContainerCatcher(keyType: keyType,
+                                                      block: block))
     }
     
     
     /// Provides access to a KeyedDecodingContainer for the given SingleValueDecodingContainer
     mutating fileprivate func nestedUnkeyedContainer(block: @escaping (inout UnkeyedEncodingContainer) throws -> Void) throws -> Void {
-        try self.encode(UnkeyedEncoderHelper(block: block))
+        try self.encode(UnkeyedEncodingContainerCatcher(block: block))
     }
     
 }

@@ -816,14 +816,14 @@ public extension SingleValueDecodingContainer {
 public extension SingleValueDecodingContainer {
     /// Provides access to a KeyedDecodingContainer for the given SingleValueDecodingContainer
     fileprivate func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
-        let catcher = try self.decode(_DecoderCatcher.self)
+        let catcher = try self.decode(DecoderCatcher.self)
         return try catcher.decoder.container(keyedBy: keyType)
     }
     
     /*
     /// Provides access to a KeyedDecodingContainer for the given SingleValueDecodingContainer
     fileprivate func nestedUnkeyedContainer() throws -> UnkeyedDecodingContainer {
-        let catcher = try self.decode(_DecoderCatcher.self)
+        let catcher = try self.decode(DecoderCatcher.self)
         return try catcher.decoder.unkeyedContainer()
     }
     */

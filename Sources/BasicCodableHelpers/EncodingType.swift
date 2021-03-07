@@ -106,7 +106,7 @@ public extension StandardEncoderType where Self: SupportedDictionaryRootEncoderT
         } else {
             /*let col = CollectionEncoder(collection: collection)
             return try self.encode(col)*/
-            let encoder = EncoderHelper() { encoder in
+            let encoder = EncoderCatcher() { encoder in
                 try encoder.encodeToSingleOrArray(collection)
             }
             return  try self.encode(encoder)
