@@ -58,6 +58,12 @@ Helper methods for Encoding and Decoding Containers
 
 * **BasicCodableHelperCaseIterable** - A copy of CaseIterable protocol OR a alias to CaseIterable depending on the version of Swift.  Used with Choice Enums
 
+### Classes
+
+* **DecoderCatcher** - A class used to gain access to a Decoder child 
+* **EncoderCatcher** - A class used to gain access to an Encoder child
+* **KeyedEncodingContainerCatcher** - A class used to gain access to a KeyedEncodingContainer child
+* **UnkeyedEncodingContainerCatcher** - A class used to gain access to an UnkeyedEncodingContainer
 
 ### Structures
 
