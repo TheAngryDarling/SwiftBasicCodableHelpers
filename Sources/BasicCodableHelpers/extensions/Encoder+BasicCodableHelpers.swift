@@ -33,3 +33,14 @@ public extension Encoder {
         }
     }
 }
+
+public extension Encoder {
+    /// Provides an easy method for encoding dictionaries
+    ///
+    /// When the key is encoded it must be transformed to one of te following base types: String, Int, UInt, Bool
+    /// - Parameter dictionary: The dictionary to encode
+    func encodeDictionary<Key, Value>(_ dictionary: [Key: Value]) throws where Key: Encodable, Value: Encodable {
+        var container = self.singleValueContainer()
+        try container.encodeDictionary(dictionary)
+    }
+}

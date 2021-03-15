@@ -33,3 +33,14 @@ public extension Decoder {
         }
     }
 }
+
+public extension Decoder {
+    /// Provides an easy method for decoding a well defined dictionaries
+    ///
+    /// - parameter type: The type of dictionary to decode.
+    /// - Returns: Returns a dictionary of key/value paris that were decoded
+    func decodeDictionary<Key, Value>(_ type: Dictionary<Key, Value>.Type) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
+        let container = try self.singleValueContainer()
+        return try container.decodeDictionary(type)
+    }
+}
