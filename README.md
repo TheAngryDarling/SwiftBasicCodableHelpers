@@ -64,6 +64,8 @@ Helper methods for Encoding and Decoding Containers
 * **EncoderCatcher** - A class used to gain access to an Encoder child
 * **KeyedEncodingContainerCatcher** - A class used to gain access to a KeyedEncodingContainer child
 * **UnkeyedEncodingContainerCatcher** - A class used to gain access to an UnkeyedEncodingContainer
+* **SimpleSingleValueDecoder** - Class to reproduce a Decoder for a SingleValueDecodingContainer with a given value
+* **SimpleSingleValueEncoder** - 
 
 ### Structures
 

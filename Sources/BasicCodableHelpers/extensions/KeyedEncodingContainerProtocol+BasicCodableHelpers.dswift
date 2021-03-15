@@ -266,8 +266,7 @@ public extension KeyedEncodingContainerProtocol {
     
         var container = self.nestedContainer(keyedBy: CodableKey.self, forKey: key)
         for(key, val) in dictionary {
-            let sEncoder = SimpleEncoder()
-            sEncoder.codingPath = self.codingPath
+            let sEncoder = SimpleSingleValueEncoder(container: self)
             try key.encode(to: sEncoder)
             guard let keyValue = sEncoder.value else {
                 throw DecodingError.valueNotFound(Any.self, DecodingError.Context(codingPath: self.codingPath, debugDescription: "Missing Key encoded value"))

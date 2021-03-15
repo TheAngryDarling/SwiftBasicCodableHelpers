@@ -602,8 +602,7 @@ public extension KeyedDecodingContainerProtocol {
                 let convertedKeyValue = UInt(keyStrValue) {
                 keyValue = convertedKeyValue
             }
-            let simpleDecoder = SimpleDecoder(keyValue)
-            simpleDecoder.codingPath = self.codingPath
+            let simpleDecoder = SimpleSingleValueDecoder(keyValue, container: self)
             let decodedKey = try simpleDecoder.decode(Key.self)
             let decodedValue = try container.decode(Value.self, forKey: key)
             rtn[decodedKey] = decodedValue

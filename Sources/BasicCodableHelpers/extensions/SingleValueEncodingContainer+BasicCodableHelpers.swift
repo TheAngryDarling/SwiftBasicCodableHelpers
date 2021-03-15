@@ -1902,8 +1902,7 @@ public extension SingleValueEncodingContainer {
         let codPath = self.codingPath
         try self.nestedContainer(keyedBy: CodableKey.self) { container in
             for(key, val) in dictionary {
-                let sEncoder = SimpleEncoder()
-                sEncoder.codingPath = codPath //self.codingPath
+                let sEncoder = SimpleSingleValueEncoder(container: container)
                 try key.encode(to: sEncoder)
                 guard let keyValue = sEncoder.value else {
                     throw DecodingError.valueNotFound(Any.self, DecodingError.Context(codingPath: codPath /*self.codingPath*/, debugDescription: "Missing Key encoded value"))
