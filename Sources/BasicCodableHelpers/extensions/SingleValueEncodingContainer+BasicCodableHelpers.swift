@@ -1092,7 +1092,7 @@ public extension SingleValueEncodingContainer {
     /// - returns: Returns an indicator if the object was encoded or not
     @discardableResult
     mutating func encode<T>(_ value: T,
-                         where condition: (T) -> Bool) throws -> Bool where T: Encodable, T: Equatable {
+                         where condition: (T) -> Bool) throws -> Bool where T: Encodable {
         guard condition(value) else { return false }
         try self.encode(value)
         return true
@@ -1105,7 +1105,7 @@ public extension SingleValueEncodingContainer {
     /// - returns: Returns an indicator if the object was encoded or not
     @discardableResult
     mutating func encodeIfPresent<T>(_ value: T?,
-                         where condition: (T) -> Bool) throws -> Bool where T: Encodable, T: Equatable {
+                         where condition: (T) -> Bool) throws -> Bool where T: Encodable {
         guard let val = value else { return false }
         return (try self.encode(val, where: condition))
     }
@@ -1797,6 +1797,7 @@ public extension SingleValueEncodingContainer {
 
 
 public extension SingleValueEncodingContainer {
+    /*
     /// Encode a collection of objects if the collection has any objects
     /// - Parameters:
     ///   - value: The collection of objects to encode
@@ -1823,6 +1824,7 @@ public extension SingleValueEncodingContainer {
         guard let val = value else { return false }
         return try self.encode(val, where: condition)
     }
+    */
     
     /// Encode a collection of objects if the collection has any objects
     /// - Parameters:

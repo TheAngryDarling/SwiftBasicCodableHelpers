@@ -20,9 +20,11 @@ func buildFunctions(for group: String, withTypes groupTypes: [String]) -> String
     for groupType in groupTypes {
         var templatePrefix: String = ""
         var templateSuffix: String = ""
+        var whereTemplateSuffix: String = ""
         if groupType == "T" {
             templatePrefix = "<T>"
             templateSuffix = " where T: Encodable, T: Equatable"
+            whereTemplateSuffix = " where T: Encodable"
         }
         
         var fnc = """
@@ -36,7 +38,7 @@ func buildFunctions(for group: String, withTypes groupTypes: [String]) -> String
             @discardableResult
             mutating func encode\(templatePrefix)(_ value: \(groupType),
                                  forKey key: Self.Key,
-                                 where condition: (\(groupType)) -> Bool) throws -> Bool\(templateSuffix) {
+                                 where condition: (\(groupType)) -> Bool) throws -> Bool\(whereTemplateSuffix) {
                 guard condition(value) else { return false }
                 try self.encode(value, forKey: key)
                 return true
@@ -51,7 +53,7 @@ func buildFunctions(for group: String, withTypes groupTypes: [String]) -> String
             @discardableResult
             mutating func encodeIfPresent\(templatePrefix)(_ value: \(groupType)?,
                                  forKey key: Self.Key,
-                                 where condition: (\(groupType)) -> Bool) throws -> Bool\(templateSuffix) {
+                                 where condition: (\(groupType)) -> Bool) throws -> Bool\(whereTemplateSuffix) {
                 guard let val = value else { return false }
                 return (try self.encode(val, forKey: key, where: condition))
             }
@@ -146,6 +148,7 @@ let knownTypeGroups: [String: [String]] = [
 #endif
 
 public extension KeyedEncodingContainerProtocol {
+    /*
     /// Encode a collection of objects if the collection has any objects
     /// - Parameters:
     ///   - value: The collection of objects to encode
@@ -176,7 +179,7 @@ public extension KeyedEncodingContainerProtocol {
         guard let val = value else { return false }
         return try self.encode(val, forKey: key, where: condition)
     }
-    
+    */
     /// Encode a collection of objects if the collection has any objects
     /// - Parameters:
     ///   - value: The collection of objects to encode

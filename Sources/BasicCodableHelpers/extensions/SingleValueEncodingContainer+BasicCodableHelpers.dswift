@@ -20,9 +20,11 @@ func buildFunctions(for group: String, withTypes groupTypes: [String]) -> String
     for groupType in groupTypes {
         var templatePrefix: String = ""
         var templateSuffix: String = ""
+        var whereTemplateSuffix: String = ""
         if groupType == "T" {
             templatePrefix = "<T>"
             templateSuffix = " where T: Encodable, T: Equatable"
+            whereTemplateSuffix = " where T: Encodable"
         }
         
         var fnc = """
@@ -34,7 +36,7 @@ func buildFunctions(for group: String, withTypes groupTypes: [String]) -> String
             /// - returns: Returns an indicator if the object was encoded or not
             @discardableResult
             mutating func encode\(templatePrefix)(_ value: \(groupType),
-                                 where condition: (\(groupType)) -> Bool) throws -> Bool\(templateSuffix) {
+                                 where condition: (\(groupType)) -> Bool) throws -> Bool\(whereTemplateSuffix) {
                 guard condition(value) else { return false }
                 try self.encode(value)
                 return true
@@ -47,7 +49,7 @@ func buildFunctions(for group: String, withTypes groupTypes: [String]) -> String
             /// - returns: Returns an indicator if the object was encoded or not
             @discardableResult
             mutating func encodeIfPresent\(templatePrefix)(_ value: \(groupType)?,
-                                 where condition: (\(groupType)) -> Bool) throws -> Bool\(templateSuffix) {
+                                 where condition: (\(groupType)) -> Bool) throws -> Bool\(whereTemplateSuffix) {
                 guard let val = value else { return false }
                 return (try self.encode(val, where: condition))
             }
@@ -148,6 +150,7 @@ public extension SingleValueEncodingContainer {
 
 
 public extension SingleValueEncodingContainer {
+    /*
     /// Encode a collection of objects if the collection has any objects
     /// - Parameters:
     ///   - value: The collection of objects to encode
@@ -174,6 +177,7 @@ public extension SingleValueEncodingContainer {
         guard let val = value else { return false }
         return try self.encode(val, where: condition)
     }
+    */
     
     /// Encode a collection of objects if the collection has any objects
     /// - Parameters:

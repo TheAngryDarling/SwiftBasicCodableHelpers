@@ -1304,7 +1304,7 @@ public extension KeyedEncodingContainerProtocol {
     @discardableResult
     mutating func encode<T>(_ value: T,
                          forKey key: Self.Key,
-                         where condition: (T) -> Bool) throws -> Bool where T: Encodable, T: Equatable {
+                         where condition: (T) -> Bool) throws -> Bool where T: Encodable {
         guard condition(value) else { return false }
         try self.encode(value, forKey: key)
         return true
@@ -1319,7 +1319,7 @@ public extension KeyedEncodingContainerProtocol {
     @discardableResult
     mutating func encodeIfPresent<T>(_ value: T?,
                          forKey key: Self.Key,
-                         where condition: (T) -> Bool) throws -> Bool where T: Encodable, T: Equatable {
+                         where condition: (T) -> Bool) throws -> Bool where T: Encodable {
         guard let val = value else { return false }
         return (try self.encode(val, forKey: key, where: condition))
     }
@@ -2125,6 +2125,7 @@ public extension KeyedEncodingContainerProtocol {
 #endif
 
 public extension KeyedEncodingContainerProtocol {
+    /*
     /// Encode a collection of objects if the collection has any objects
     /// - Parameters:
     ///   - value: The collection of objects to encode
@@ -2155,7 +2156,7 @@ public extension KeyedEncodingContainerProtocol {
         guard let val = value else { return false }
         return try self.encode(val, forKey: key, where: condition)
     }
-    
+    */
     /// Encode a collection of objects if the collection has any objects
     /// - Parameters:
     ///   - value: The collection of objects to encode
