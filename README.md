@@ -55,7 +55,6 @@ Helper methods for Encoding and Decoding Containers
 * **StandardEncoderType** - Its the same structure as DataEncoderType but has no associated types so can be used as a variable type
 * **SupportedDictionaryRootEncoderType** - Indicator protocol if an EncoderType supports encoding dictionaries from the root
 * **SupportedArrayRootEncoderType** - Indicator protocol if an EncoderType supports encoding arrays from the root
-
 * **BasicCodableHelperCaseIterable** - A copy of CaseIterable protocol OR a alias to CaseIterable depending on the version of Swift.  Used with Choice Enums
 
 ### Classes
@@ -65,22 +64,23 @@ Helper methods for Encoding and Decoding Containers
 * **KeyedEncodingContainerCatcher** - A class used to gain access to a KeyedEncodingContainer child
 * **UnkeyedEncodingContainerCatcher** - A class used to gain access to an UnkeyedEncodingContainer
 * **SimpleSingleValueDecoder** - Class to reproduce a Decoder for a SingleValueDecodingContainer with a given value
-* **SimpleSingleValueEncoder** - 
+* **SimpleSingleValueEncoder** - Class to mimic an Encoder to capture the value of a SingleValueEncodingContainer
 
 ### Structures
 
 * **CodableKey** - Basic Coding Key for use when working with unknown keys
+* **CodableDictionary** - A dictionary wrapper that is automatically codable as key: value where Key is not a string but encodes/deocdes as a single value of type String
 
 ### Choice Enums
 
 * **BasicEncoderChoice** - Provides a programmatic way of choosing which encoder to use. This is nice when providing end users with the choice of what type file to encode to
-  * **xmlPList** - Use the standard PropertyListEncoder for xml (ObjectiveC runtime ONLY)
-  * **binaryPList** - Use the standard PropertyListEncoder for binary (ObjectiveC runtime ONLY)
+  * **xmlPList** - Use the standard PropertyListEncoder for xml (ObjectiveC runtime or swift >= 5.1)
+  * **binaryPList** - Use the standard PropertyListEncoder for binary (ObjectiveC runtime or swift >= 5.1)
   * **json** - Use the standard JSONEncoder
   * **other** - You can specify your own instance of an encoder
 
 * **BasicDecoderChoice** - Provides a programmatic way of choosing which decoder to use.
-  * **plist** -  Use the standard PropertyListDecoder (ObjectiveC runtime ONLY)
+  * **plist** -  Use the standard PropertyListDecoder (ObjectiveC runtime or swift >= 5.1)
   * **json** - If swift < 4.2 and BasicDecoderChoice.usePatchedJSONDecoder enabled, will use BasicCodableHelperPatchedJSONDecoder otherwise will use standard JSONDecoder
   * **other** - You can specify your own instance of a decoder
 
