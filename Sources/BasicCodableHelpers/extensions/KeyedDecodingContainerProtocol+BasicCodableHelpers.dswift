@@ -148,6 +148,79 @@ public extension KeyedDecodingContainerProtocol {
     }
 }
 
+internal extension KeyedDecodingContainerProtocol where Key == CodableKey {
+    
+    /// Test if if the dictionary Key object type can be decoded from ofType
+    private func isKey<T1, T2>(_ keyType: T1.Type, ofType: T2.Type) -> Bool {
+        return (keyType == ofType ||
+                ofType == (keyType as? BasicCodableHelperCustomDictionaryKeySingleValueCodable.Type)?.DictionaryKeySingleValueCodableType.realType)
+    }
+    /// Provides a way of decoding a key container to a dictionary
+    ///
+    /// - parameter type: The type of dictionary to decode.
+    /// - parameter key: The key that the decoded value is associated with.
+    /// - Returns: Returns a dictionary of key/value paris that were decoded
+    func _decodeDictionary<DictionaryKey, DictionaryValue>(_ type: Dictionary<DictionaryKey, DictionaryValue>.Type) throws -> Dictionary<DictionaryKey, DictionaryValue> where DictionaryKey: Decodable, DictionaryValue: Decodable {
+        var rtn = Dictionary<DictionaryKey, DictionaryValue>()
+
+        for key in self.allKeys {
+            var keyValue: Any = key.intValue ?? key.stringValue
+            // Patch to convert string bools to real bools when the key is of Bool
+            if self.isKey(DictionaryKey.self, ofType: Bool.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = Bool(keyStrValue) {
+                keyValue = convertedKeyValue
+            } else if self.isKey(DictionaryKey.self, ofType: Int.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = Int(keyStrValue) {
+                keyValue = convertedKeyValue
+            } else if self.isKey(DictionaryKey.self, ofType: Int8.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = Int(keyStrValue) {
+                keyValue = convertedKeyValue
+            } else if self.isKey(DictionaryKey.self, ofType: Int16.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = Int(keyStrValue) {
+                keyValue = convertedKeyValue
+            } else if self.isKey(DictionaryKey.self, ofType: Int32.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = Int(keyStrValue) {
+                keyValue = convertedKeyValue
+            } else if self.isKey(DictionaryKey.self, ofType: Int64.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = Int(keyStrValue) {
+                keyValue = convertedKeyValue
+            } else if self.isKey(DictionaryKey.self, ofType: UInt.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = UInt(keyStrValue) {
+                keyValue = convertedKeyValue
+            } else if self.isKey(DictionaryKey.self, ofType: UInt8.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = UInt(keyStrValue) {
+                keyValue = convertedKeyValue
+            } else if self.isKey(DictionaryKey.self, ofType: UInt16.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = UInt(keyStrValue) {
+                keyValue = convertedKeyValue
+            } else if self.isKey(DictionaryKey.self, ofType: UInt32.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = UInt(keyStrValue) {
+                keyValue = convertedKeyValue
+            } else if self.isKey(DictionaryKey.self, ofType: UInt64.self),
+                let keyStrValue = keyValue as? String,
+                let convertedKeyValue = UInt(keyStrValue) {
+                keyValue = convertedKeyValue
+            }
+            let simpleDecoder = SimpleSingleValueDecoder(keyValue, container: self)
+            let decodedKey = try simpleDecoder.decode(DictionaryKey.self)
+            let decodedValue = try self.decode(DictionaryValue.self, forKey: key)
+            rtn[decodedKey] = decodedValue
+        }
+        
+        return rtn
+    }
+}
+
 public extension KeyedDecodingContainerProtocol {
     /// Provides an easy method for decoding a well defined dictionaries
     ///
@@ -156,64 +229,9 @@ public extension KeyedDecodingContainerProtocol {
     /// - Returns: Returns a dictionary of key/value paris that were decoded
     func decodeDictionary<Key, Value>(_ type: Dictionary<Key, Value>.Type,
                                       forKey key: Self.Key) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
-        var rtn = Dictionary<Key, Value>()
         
         let container = try nestedContainer(keyedBy: CodableKey.self, forKey: key)
-        for key in container.allKeys {
-            var keyValue: Any = key.intValue ?? key.stringValue
-            // Patch to convert string bools to real bools when the key is of Bool
-            if Key.self == Bool.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = Bool(keyStrValue) {
-                keyValue = convertedKeyValue
-            } else if Key.self == Int.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = Int(keyStrValue) {
-                keyValue = convertedKeyValue
-            } else if Key.self == Int8.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = Int(keyStrValue) {
-                keyValue = convertedKeyValue
-            } else if Key.self == Int16.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = Int(keyStrValue) {
-                keyValue = convertedKeyValue
-            } else if Key.self == Int32.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = Int(keyStrValue) {
-                keyValue = convertedKeyValue
-            } else if Key.self == Int64.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = Int(keyStrValue) {
-                keyValue = convertedKeyValue
-            } else if Key.self == UInt.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = UInt(keyStrValue) {
-                keyValue = convertedKeyValue
-            } else if Key.self == UInt8.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = UInt(keyStrValue) {
-                keyValue = convertedKeyValue
-            } else if Key.self == UInt16.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = UInt(keyStrValue) {
-                keyValue = convertedKeyValue
-            } else if Key.self == UInt32.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = UInt(keyStrValue) {
-                keyValue = convertedKeyValue
-            } else if Key.self == UInt64.self,
-                let keyStrValue = keyValue as? String,
-                let convertedKeyValue = UInt(keyStrValue) {
-                keyValue = convertedKeyValue
-            }
-            let simpleDecoder = SimpleSingleValueDecoder(keyValue, container: self)
-            let decodedKey = try simpleDecoder.decode(Key.self)
-            let decodedValue = try container.decode(Value.self, forKey: key)
-            rtn[decodedKey] = decodedValue
-        }
-        
-        return rtn
+        return try container._decodeDictionary(type)
     }
     /// Provides an easy method for decoding a well defined dictionaries
     ///
