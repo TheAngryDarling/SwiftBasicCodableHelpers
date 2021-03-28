@@ -444,12 +444,188 @@ class BasicCodableHelpersTests: XCTestCase {
             }
         }
     }
+    
+    struct EncodableKey<Value>: Hashable, Codable, BasicCodableHelperCustomDictionaryKeySingleValueCodable where Value: Hashable, Value: Codable {
+        
+        public static var DictionaryKeySingleValueCodableType: BasicCodableHelperDictionaryKeySingleValueCodableType {
+            if Value.self == Bool.self { return .bool }
+            else if Value.self == Int.self { return .int }
+            else if Value.self == UInt.self { return .uint }
+            else { return .string }
+        }
+        
+        private let value: Value
+        
+        public var hashValue: Int { return self.value.hashValue }
+        
+        public init(_ value: Value) {
+            self.value = value
+        }
+        public init(from decoder: Decoder) throws {
+            self.value = try Value(from: decoder)
+        }
+        public func encode(to encoder: Encoder) throws {
+            try self.value.encode(to: encoder)
+        }
+        #if swift(>=4.2)
+        public func hash(into hasher: inout Hasher) {
+            self.value.hash(into: &hasher)
+        }
+        #endif
+        
+        public static func ==(lhs: EncodableKey, rhs: EncodableKey) -> Bool {
+            return lhs.value == rhs.value
+        }
+    }
+    
+    func testCodableDictionary() {
+        func testDictEncoding<Key, Value>(_ dict: Dictionary<Key, Value>,
+                                  file: StaticString = #file,
+                                  line: UInt = #line) where Key: Codable, Value: Codable, Value: Equatable {
+            print("Testing KeyType: \(Key.self)")
+            print()
+            
+            let codableDict = CodableDictionary(dict)
+            var outputFormatting: JSONEncoder.OutputFormatting = .prettyPrinted
+            if #available(OSX 10.13, *) {
+                outputFormatting.insert(.sortedKeys)
+            }
+            #if swift(>=5.3)
+            outputFormatting.insert(.withoutEscapingSlashes)
+            #endif
+            let encoder = JSONEncoder(outputFormatting: outputFormatting)
+            let decoder = JSONDecoder()
+            
+            guard let encodedDict = XCTAssertsNoThrow(try encoder.encode(dict),
+                                                      file: file, line: line),
+                  let encodedCodableDict = XCTAssertsNoThrow(try encoder.encode(codableDict),
+                                                             file: file, line: line) else {
+                return
+            }
+            guard let dictString = String(data: encodedDict,
+                                          encoding: .utf8) else {
+                XCTFail("Unable to convert encodedDict to string",
+                        file: file, line: line)
+                return
+            }
+            guard let encodedCodableString = String(data: encodedCodableDict,
+                                                    encoding: .utf8) else {
+                XCTFail("Unable to convert encodedCodableDict to string",
+                        file: file, line: line)
+                return
+            }
+            
+            print("Encoded Dict JSON:")
+            print(dictString)
+            print()
+            
+            print("Encoded Codable Dict JSON:")
+            print(encodedCodableString)
+            print()
+            
+            guard let decodedDict = XCTAssertsNoThrow(try decoder.decode(Dictionary<Key, Value>.self,
+                                                                         from: encodedDict),
+                                                      file: file, line: line),
+                  let decodedCodableDict = XCTAssertsNoThrow(try decoder.decode(CodableDictionary<Key, Value>.self,
+                                                                                from: encodedCodableDict),
+                                                             file: file, line: line) else {
+                return
+            }
+            
+            XCTAssertEqual(dict, decodedDict, file: file, line: line)
+            #if swift(>=4.1)
+            XCTAssertEqual(codableDict, decodedCodableDict, file: file, line: line)
+            #else
+            XCTAssertTrue((codableDict == decodedCodableDict), file: file, line: line)
+            #endif
+            
+            XCTAssertTrue((dict == codableDict), file: file, line: line)
+            XCTAssertTrue((decodedDict == decodedCodableDict), file: file, line: line)
+            
+        }
+        
+        let stringKeyIntValDict: [String: EncodableKey<Int>] = [
+            "Key1": 1,
+            "Key2": 2,
+            "Key3": 3,
+            "Key4\nKey4": 4,
+            "Key5\r\nKey4": 5
+        ]
+        
+        testDictEncoding(stringKeyIntValDict)
+        
+        
+        let stringKeyDict: [String: String] = [
+            "Key1": "Value1",
+            "Key2": "Value2",
+            "Key3": "Value3",
+            "Key4\nKey4": "Value4\nValue4",
+            "Key5\r\nKey4": "Value5\r\nValue5"
+        ]
+        
+        testDictEncoding(stringKeyDict)
+        
+        let encodableStringKeyDict: [EncodableKey<String>: String] = stringKeyDict.mapKeys {
+            return EncodableKey<String>($0)
+        }
+        
+        testDictEncoding(encodableStringKeyDict)
+        
+        let intKeyDict: [Int: String] = [
+            1: "Value1",
+            2: "Value2",
+            3: "Value3"
+        ]
+        
+        testDictEncoding(intKeyDict)
+        
+        let encodableIntKeyDict: [EncodableKey<Int>: String] = intKeyDict.mapKeys {
+            return EncodableKey<Int>($0)
+        }
+        
+        testDictEncoding(encodableIntKeyDict)
+        
+        let boolKeyDict: [Bool: String] = [
+            true: "Value1",
+            false: "Value2"
+        ]
+        
+        testDictEncoding(boolKeyDict)
+        
+        let encodableBoolKeyDict: [EncodableKey<Bool>: String] = boolKeyDict.mapKeys {
+            return EncodableKey<Bool>($0)
+        }
+        
+        testDictEncoding(encodableBoolKeyDict)
+ 
+    }
 
     static var allTests = [
         ("testEncodeDecodeIfNotAndWithDefault", testEncodeDecodeIfNotAndWithDefault),
         ("testEncodeDecodeSingleOrArray", testEncodeDecodeSingleOrArray),
         ("testEncodeIfNotEmpty", testEncodeIfNotEmpty),
         ("testCodingDictionaries", testCodingDictionaries),
-        ("testSingleValueEncodingSingleOrArray", testSingleValueEncodingSingleOrArray)
+        ("testSingleValueEncodingSingleOrArray", testSingleValueEncodingSingleOrArray),
+         ("testCodableDictionary", testCodableDictionary)
     ]
+}
+
+extension BasicCodableHelpersTests.EncodableKey: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        precondition(Value.self == String.self)
+        self.value = (value as! Value)
+    }
+}
+extension BasicCodableHelpersTests.EncodableKey: ExpressibleByIntegerLiteral {
+    public init(integerLiteral value: Int) {
+        precondition(Value.self == Int.self || Value.self == UInt.self)
+        self.value = (value as! Value)
+    }
+}
+extension BasicCodableHelpersTests.EncodableKey: ExpressibleByBooleanLiteral {
+    
+    public init(booleanLiteral value: Bool) {
+        precondition(Value.self == Bool.self)
+        self.value = (value as! Value)
+    }
 }
