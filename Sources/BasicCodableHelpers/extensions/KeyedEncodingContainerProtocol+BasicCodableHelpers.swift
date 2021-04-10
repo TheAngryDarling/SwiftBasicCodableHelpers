@@ -112,6 +112,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int8?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -202,6 +219,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int16?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -292,6 +326,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int32?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -382,6 +433,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int64?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -472,6 +540,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }
 }
 
@@ -568,6 +653,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt8?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -658,6 +760,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt16?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -748,6 +867,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt32?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -838,6 +974,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt64?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -928,6 +1081,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }
 }
 
@@ -1024,6 +1194,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Bool?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1114,6 +1301,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Double?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1204,6 +1408,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Float?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1294,6 +1515,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: String?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1384,6 +1622,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil<T>(_ value: T?,
+                         forKey key: Self.Key) throws -> EncodedAs where T: Encodable {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }
 }
 
@@ -1483,6 +1738,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int24?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1573,6 +1845,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int40?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1663,6 +1952,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int48?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1753,6 +2059,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int56?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }
 }
 
@@ -1848,6 +2171,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt24?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1938,6 +2278,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt40?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -2028,6 +2385,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt48?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -2118,6 +2492,23 @@ public extension KeyedEncodingContainerProtocol {
         return (try self.encodeIfPresent(value,
                                          forKey: key,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value for the given key or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - parameter key: The key to associate the value with.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt56?,
+                         forKey key: Self.Key) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v, forKey: key)
+            return .value
+        } else {
+            try self.encodeNil(forKey: key)
+            return .nil
+        }
     }
 }
 

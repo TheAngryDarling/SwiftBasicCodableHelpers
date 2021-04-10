@@ -105,6 +105,21 @@ func buildFunctions(for group: String, withTypes groupTypes: [String]) -> String
                 return (try self.encodeIfPresent(value,
                                                  where: { $0 != nValue() }))
             }
+
+            /// Encodes the given value or nil of no value
+            ///
+            /// - parameter value: The value to encode.
+            /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+            @discardableResult
+            mutating func encodeIfPresentOrNil\(templatePrefix)(_ value: \(groupType)?) throws -> EncodedAs\(whereTemplateSuffix) {
+                if let v = value {
+                    try self.encode(v)
+                    return .value
+                } else {
+                    try self.encodeNil()
+                    return .nil
+                }
+            }
         """
         rtn += fnc
     }

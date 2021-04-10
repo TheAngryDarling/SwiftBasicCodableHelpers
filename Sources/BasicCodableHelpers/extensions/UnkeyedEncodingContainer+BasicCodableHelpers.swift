@@ -98,6 +98,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Int8) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int8?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -174,6 +189,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Int16) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int16?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -250,6 +280,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Int32) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int32?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -326,6 +371,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Int64) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int64?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -402,6 +462,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Int) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }
 }
 
@@ -484,6 +559,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> UInt8) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt8?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -560,6 +650,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> UInt16) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt16?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -636,6 +741,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> UInt32) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt32?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -712,6 +832,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> UInt64) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt64?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -788,6 +923,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> UInt) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }
 }
 
@@ -870,6 +1020,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Bool) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Bool?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -946,6 +1111,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Double) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Double?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1022,6 +1202,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Float) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Float?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1098,6 +1293,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> String) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: String?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1174,6 +1384,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> T) throws -> Bool where T: Encodable, T: Equatable {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil<T>(_ value: T?) throws -> EncodedAs where T: Encodable {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }
 }
 
@@ -1259,6 +1484,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Int24) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int24?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1335,6 +1575,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Int40) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int40?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1411,6 +1666,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Int48) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int48?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1487,6 +1757,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> Int56) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: Int56?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }
 }
 
@@ -1568,6 +1853,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> UInt24) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt24?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1644,6 +1944,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> UInt40) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt40?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1720,6 +2035,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> UInt48) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt48?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }    /// Encodes the given value for the given key.
     ///
     /// - parameter value: The value to encode.
@@ -1796,6 +2126,21 @@ public extension UnkeyedEncodingContainer {
                          ifNot nValue: @autoclosure () -> UInt56) throws -> Bool {
         return (try self.encodeIfPresent(value,
                                          where: { $0 != nValue() }))
+    }
+
+    /// Encodes the given value or nil of no value
+    ///
+    /// - parameter value: The value to encode.
+    /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+    @discardableResult
+    mutating func encodeIfPresentOrNil(_ value: UInt56?) throws -> EncodedAs {
+        if let v = value {
+            try self.encode(v)
+            return .value
+        } else {
+            try self.encodeNil()
+            return .nil
+        }
     }
 }
 

@@ -119,6 +119,23 @@ func buildFunctions(for group: String, withTypes groupTypes: [String]) -> String
                                                  forKey: key,
                                                  where: { $0 != nValue() }))
             }
+
+            /// Encodes the given value for the given key or nil of no value
+            ///
+            /// - parameter value: The value to encode.
+            /// - parameter key: The key to associate the value with.
+            /// - returns: Returns an indicator if the object was encoded or if nil was encoded
+            @discardableResult
+            mutating func encodeIfPresentOrNil\(templatePrefix)(_ value: \(groupType)?,
+                                 forKey key: Self.Key) throws -> EncodedAs\(whereTemplateSuffix) {
+                if let v = value {
+                    try self.encode(v, forKey: key)
+                    return .value
+                } else {
+                    try self.encodeNil(forKey: key)
+                    return .nil
+                }
+            }
         """
         rtn += fnc
     }

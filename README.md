@@ -20,6 +20,10 @@ Helper methods for Encoding and Decoding Containers
 
 * **decodeDictionary** - New decoder for decoding well defined dictionaries as if they were objects 
 
+#### UnkeyedDecodingContainer
+
+* **decodeDictionary** - New decoder for decoding well defined dictionaries as if they were objects 
+
 #### KeyedEncodingContainerProtocol / UnkeyedEncodingContainer
 
 * **encode** - New encode if not method.  Encodes an object only if it does not equal a given value: encode(..., ifNot...) throws
@@ -29,10 +33,16 @@ Helper methods for Encoding and Decoding Containers
 * **encodeIfNotEmpty** - New encode method.  Encodes the collection only if the collection has elements
 * **encodeIfPresentAndNotEmpty** - New encode if present method.  Encodes the collection only if its not nil AND the collection has elements
 * **encodeDictionary**, **encodeDictionaryIfPresent** - New encode methods for encoding well defined dictionaries as if they were objects
+* **encodeIfPresentOrNil** - Encodes an object to the encoder or encodes nil of object does not exist
 
 #### SingleValueEncodingContainer
 
 * **encodeDictionary** - New encode methods for encoding well defined dictionaries as if they were objects
+* **encodeIfPresentOrNil** - Encodes an object to the encoder or encodes nil of object does not exist
+
+#### UnkeyedEncodingContainer
+
+* **encodeIfPresentOrNil** - Encodes an object to the encoder or encodes nil of object does not exist
 
 #### Encoder
 
