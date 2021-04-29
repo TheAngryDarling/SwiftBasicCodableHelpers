@@ -8,6 +8,22 @@
 import Foundation
 
 
+#if swift(>=5.4)
+/// Basic protocol that defines an Encoder like JSONEncoder and PropertyListEncoder
+public protocol EncoderType: AnyObject {
+    /// The data type used to encode to.  Normally this is Data
+    associatedtype EncodedData
+    
+    /// A dictionary you use to customize the encoding process by providing contextual information.
+    var userInfo: [CodingUserInfoKey : Any] { get set }
+    
+    /// Returns a encoded representation of the value you supply.
+    ///
+    /// - Parameter value: The value to encode
+    /// - Returns: Returns the EncodedData representation of value
+    func encode<T>(_ value: T) throws -> EncodedData where T : Encodable
+}
+#else
 /// Basic protocol that defines an Encoder like JSONEncoder and PropertyListEncoder
 public protocol EncoderType: class {
     /// The data type used to encode to.  Normally this is Data
@@ -22,12 +38,27 @@ public protocol EncoderType: class {
     /// - Returns: Returns the EncodedData representation of value
     func encode<T>(_ value: T) throws -> EncodedData where T : Encodable
 }
+#endif
 
 /// Protocol that defines encoders that return Data as the results
 public protocol DataEncoderType: EncoderType {
     associatedtype EncodedData = Data
 }
 
+#if swift(>=5.4)
+/// Standard definition of an encoder that writes to a data structure
+public protocol StandardEncoderType: AnyObject {
+    
+    /// A dictionary you use to customize the encoding process by providing contextual information.
+    var userInfo: [CodingUserInfoKey : Any] { get set }
+    
+    /// Returns a encoded representation of the value you supply.
+    ///
+    /// - Parameter value: The value to encode
+    /// - Returns: Returns the EncodedData representation of value
+    func encode<T>(_ value: T) throws -> Data where T : Encodable
+}
+#else
 /// Standard definition of an encoder that writes to a data structure
 public protocol StandardEncoderType: class {
     
@@ -40,6 +71,7 @@ public protocol StandardEncoderType: class {
     /// - Returns: Returns the EncodedData representation of value
     func encode<T>(_ value: T) throws -> Data where T : Encodable
 }
+#endif
 
 /// Indicator if the root supports Dictionaries
 public protocol SupportedDictionaryRootEncoderType { }
