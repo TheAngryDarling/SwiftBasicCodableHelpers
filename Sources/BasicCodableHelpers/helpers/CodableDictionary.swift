@@ -163,7 +163,7 @@ extension CodableDictionary: Sequence {
 }
 
 extension CodableDictionary: Collection {
-    public typealias SubSequence = Slice<CoreData>
+    //public typealias SubSequence = Slice<CoreData>
     public typealias Element = (key: Key, value: Value)
     public typealias Index = CoreData.Index
     /// The position of the first element in a nonempty dictionary.
