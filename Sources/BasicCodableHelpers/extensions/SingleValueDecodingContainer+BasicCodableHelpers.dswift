@@ -176,7 +176,7 @@ public extension SingleValueDecodingContainer {
     func decodeDictionary<Key, Value>(_ type: Dictionary<Key, Value>.Type) throws -> Dictionary<Key, Value> where Key: Decodable, Value: Decodable {
 
         let container = try nestedContainer(keyedBy: CodableKey.self)
-        return container._decodeDictionary(type)
+        return try container._decodeDictionary(type)
         
     }
     /// Provides an easy method for decoding a well defined dictionaries
