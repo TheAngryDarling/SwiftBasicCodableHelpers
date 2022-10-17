@@ -13,8 +13,8 @@ internal func canEncodeSingleFromArray<C>(_ collection: C,
         guard collection.count == 1 else { return false }
         guard let first = collection.first else { return false }
         let m = Mirror(reflecting: first)
-        guard let ds = m.displayStyle else { return false }
-        print(ds)
+        guard let _ /*ds*/ = m.displayStyle else { return false }
+        //print(ds)
         return true
 }
 
